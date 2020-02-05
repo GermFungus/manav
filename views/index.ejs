@@ -1,0 +1,251 @@
+<html>
+	<head>
+		<title>Configuration</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	</head>
+	<style>
+	td{
+		word-break: break-word;
+	}
+	td:nth-child(2){
+		width:320px;
+	}
+	li{list-style:none;line-height:30px;}
+	input[type='checkbox']{
+		margin-right:5px;
+		margin-top:9px;
+		float:left;
+	}
+	</style>
+	<body>
+		<div class="col-lg-12">
+			<div class="form-group">
+				<label for="country">Select Country</label>
+				<select class="form-control" id="country">
+					<option value='0'>Select</option>
+					<option value='usa'>USA</option>
+				</select>
+			</div>
+			<div class="form-group source" style="display:none;">
+				<label for="source">Source</label>
+				<input type="text" class="form-control" id="source">
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-default" onclick="get_result();">Submit</button>
+			</div>
+			<div class="form-group">
+				<div id="result" style="width:50%;display:none;"></div>
+				<div style="float:right;marign-left:20px;width:45%;display:none;" id="column_side">
+					<div class="card">
+						   <div class="card-body">
+							<div id="table" class="table-editable">
+							  <span class="table-add float-right mb-3 mr-2" style="margin: 10px;height: 27px;width: 78px;float: right;"><button>Add More</button></span>
+							  <table class="table table-bordered table-responsive-md table-striped text-center">
+								<thead>
+								  <tr>
+									<th class="text-center">Column</th>
+									<th class="text-center">Value</th>
+									<th class="text-center">Remove</th>
+								  </tr>
+								</thead>
+								<tbody>
+								  <tr>
+									<td class="pt-3-half" contenteditable="true">Country</td>
+									<td class="pt-3-half" contenteditable="true"></td>
+									<td class="pt-3-half"></td>
+								  </tr>
+								  <!-- This is our clonable table line -->
+								  <tr>
+									<td class="pt-3-half" contenteditable="true">Source</td>
+									<td class="pt-3-half" contenteditable="true"></td>
+									<td class="pt-3-half"></td>
+								  </tr>
+								  <!-- This is our clonable table line -->
+								  <tr>
+									<td class="pt-3-half" contenteditable="true">SourceType</td>
+									<td class="pt-3-half" contenteditable="true"></td>
+									<td class="pt-3-half"></td>
+								  </tr>
+								  <!-- This is our clonable table line -->
+								  <tr>
+									<td class="pt-3-half" contenteditable="true">ResponseType</td>
+									<td class="pt-3-half" contenteditable="true"></td>
+									<td class="pt-3-half"></td>									
+								  </tr>
+								</tbody>
+							  </table>
+							</div>
+						  </div>
+						</div>
+				</div>
+			</div>
+			
+		</div>
+	</body>
+</html>
+<script>
+$(document).ready(function(){
+	$('#country').on('change', function(){
+	
+		if($(this).val() == 'usa'){
+			$('.source').show();
+		}else{
+			$('.source').hide();
+		}
+	})
+})
+var str = '';
+var tree = [];
+function allDescendants (node) {
+	if(node.tagName){
+	
+		str += '<ul>';
+		str += '<li><input type="checkbox" value="'+tree.join('>')+'" />'+ node.tagName;
+		if(node.attributes.length > 0){
+			str += '<ul>';
+			for(var k=0; k < node.attributes.length; k++){
+				str += '<li><input type="checkbox" value="'+tree.join('>')+'>'+node.attributes.item(k).nodeName+'" />'+node.attributes.item(k).nodeName+'</li>';
+			}
+			str +='</ul>';
+	   }
+		if(node.childNodes.length > 0){
+			for (var i = 0; i < node.childNodes.length; i++) {
+				var child = node.childNodes[i];
+				if(child.tagName){
+					tree.push(child.tagName);
+					//console.log(tree);
+				}
+				allDescendants(child);
+			}
+		}else{
+			str += '</li>';
+		}
+		str += '</ul>';
+		tree.pop();
+		
+		
+	}
+	
+} 
+
+function get_result(){
+	var source = $('#source').val();
+	var country = $('#country').val();
+	$.ajax({
+		type:'POST',
+		url:'/submit-form',
+		data:{source: source, country: country}
+	}).done(function(resp){
+		
+		var parser = new DOMParser();
+		var doc = parser.parseFromString(resp, 'text/xml');
+		var rootElement = doc.documentElement;
+		    var children = rootElement.childNodes;
+		 	for(var i =0; i< children.length; i++) {
+			   var child = children[i];
+			   // <studen> Element
+			   if(child.nodeType == Node.ELEMENT_NODE)  {
+					if(child.childNodes.length > 0){
+						tree = [];
+						tree.push(child.tagName);
+						allDescendants(child);
+					}else{
+					   str += '<ul>';
+					   str += '<li><input type="checkbox" value="'+child.tagName+'" />'+child.tagName;
+					   if(child.attributes.length > 0){
+							str += '<ul>';
+							for(var k=0; k < child.attributes.length; k++){
+								str += '<li><input type="checkbox" value="'+child.tagName+'>'+child.attributes.item(k).nodeName+'" />'+child.attributes.item(k).nodeName+'</li>';
+							}
+							str +='</ul>';
+					   }
+					   
+					   str += '</li>';
+					   str += '</ul>';
+				   }
+				   
+			   }
+			}
+		
+		$('#result').show();
+		$('#result').html(str);
+		$('#column_side').show();
+	})
+}
+
+ const $tableID = $('#table');
+ const $BTN = $('#export-btn');
+ const $EXPORT = $('#export');
+ const newTr = '<tr>  <td class="pt-3-half" contenteditable="true"></td>  <td class="pt-3-half" contenteditable="true"></td> <td>    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">Remove</button></span>  </td></tr>';
+
+ $('.table-add').on('click', 'button', () => {
+
+   //const $clone = $tableID.find('tbody tr').last().clone(true).removeClass('hide table-line');
+
+   //if ($tableID.find('tbody tr').length === 0) {
+
+     $('tbody').append(newTr);
+   //}
+
+   //$tableID.find('table').append($clone);
+ });
+
+ $tableID.on('click', '.table-remove', function () {
+
+   $(this).parents('tr').detach();
+ });
+
+ $tableID.on('click', '.table-up', function () {
+
+   const $row = $(this).parents('tr');
+
+   if ($row.index() === 1) {
+     return;
+   }
+
+   $row.prev().before($row.get(0));
+ });
+
+ $tableID.on('click', '.table-down', function () {
+
+   const $row = $(this).parents('tr');
+   $row.next().after($row.get(0));
+ });
+
+ // A few jQuery helpers for exporting only
+ jQuery.fn.pop = [].pop;
+ jQuery.fn.shift = [].shift;
+
+ $BTN.on('click', () => {
+
+   const $rows = $tableID.find('tr:not(:hidden)');
+   const headers = [];
+   const data = [];
+
+   // Get the headers (add special header logic here)
+   $($rows.shift()).find('th:not(:empty)').each(function () {
+
+     headers.push($(this).text().toLowerCase());
+   });
+
+   // Turn all existing rows into a loopable array
+   $rows.each(function () {
+     const $td = $(this).find('td');
+     const h = {};
+
+     // Use the headers from earlier to name our hash keys
+     headers.forEach((header, i) => {
+
+       h[header] = $td.eq(i).text();
+     });
+
+     data.push(h);
+   });
+
+   // Output the result
+   $EXPORT.text(JSON.stringify(data));
+ });
+
+</script>

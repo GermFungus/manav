@@ -1,0 +1,306 @@
+*{
+	margin:0;
+	padding:0;
+}
+li{
+	list-style:none;
+	margin:5px;
+}
+ul li ul{margin-left:20px;}
+input[type='checkbox']{
+	margin-right:5px;
+	float:left;
+}
+.main_container{
+	margin:20px;
+}
+.list{
+	margin-top:20px;
+}
+.delete{
+	cursor:pointer;
+	margin-left: 10px;
+    background: red;
+    padding: 5px;
+    color: #fff;
+}
+.desc_item{
+	height: 350px;
+    overflow-y: scroll;
+}
+.table_stucture{margin-bottom:30px;}
+.type{padding:20px;}
+.type label{margin-right:15px;}
+.add_relation{margin-top:20px;margin-bottom:20px;}
+.add_rule_modal .modal-dialog{width:1000px !important;}
+.control{display:flex;}
+.control li{padding:10px;}
+.control li img{width:10px;margin:5px;}
+.new_item, .delete_item{cursor:pointer;}
+.rule_div{display:flex;}
+.record_condition .condition, .rrecord{
+	float: left;
+    width: 100%;
+}
+.rule_item{
+	width:20%;
+	min-height:300px;
+	border:1px solid;
+}
+.rule_item li{
+	border-bottom: 1px solid;
+    margin: 0;
+    padding: 5px;
+    cursor: pointer;
+}
+.desc_item{
+	width:79%;
+	min-height:300px;
+	margin-left:1%;
+	border:1px solid;
+}
+.right{padding-right:0px;}
+.rule_item h5, .desc_item h5 {
+    margin: 0;
+    padding: 5px;
+    background-color: #000;
+    color: #fff;
+}
+.content{
+	float:left;
+	width:100%;
+}
+.hidden{display:none !important;}
+.result{
+	float: left;
+    width: 100%;
+}
+.navbar-nav{width:100%;margin:20px;}
+.nav-item{
+	border:1px solid;
+	padding:10px;
+	border-radius:5px;
+}
+.rsource{
+	height:370px;
+	overflow:auto;
+}
+.content label{line-height:35px;}
+.content input[type="checkbox"]{height:20px;margin-top:8px;box-shadow:unset !important;}
+.rsource ul{width:100%;}
+.default{margin-top:20px;}
+.form-control-plaintext {
+    display: block;
+    width: 100%;
+    padding: .375rem 0;
+    margin-bottom: 0;
+    line-height: 1.5;
+    color: #212529;
+    background-color: transparent;
+    border: solid transparent;
+    border-width: 1px 0;
+}
+.col-form-label {
+    padding-top: calc(.375rem + 1px);
+    padding-bottom: calc(.375rem + 1px);
+    margin-bottom: 0;
+    font-size: inherit;
+    line-height: 1.5;
+}
+.inputType, .inputAction{
+	padding:6px !important;
+	border-radius:0px;
+}
+.rule_item .active{background:#eee;}
+.relation{
+	margin-left: 50px;
+    width: 85%;
+}
+.prop_structure{
+	height: 300px;
+    overflow-y: scroll;
+	padding:20px;
+}
+.modal-body{
+	word-wrap:break-word;
+}
+.property_structure table{
+	width: 60%;
+    margin: auto;
+    border: 1px solid;
+}
+.property_structure tr{border-bottom:1px solid;height:50px;}
+.property_structure td{
+	padding:5px;text-align:center;
+}
+.selected:before{
+    background-image: aqua;
+    content: '';
+    display: block;
+    width: 5px;
+    height: 10px;
+    border: solid #5cb85c;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    float: left;
+    margin-right: 10px;
+    margin-top: 4px;
+}
+.custom_field input[type='text'], .custom_table input[type='text']{
+	width: 85%;
+    height: 34px;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+}
+.plist li{
+    margin: 5px;
+	list-style:none;
+}
+
+.content{margin-top:20px;}
+
+
+/**
+* Nestable Draggable Handles
+*/
+.dd3-content {
+    display: block;
+    height: 45px;
+    padding: 5px 10px 5px 54px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 32px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
+    background: -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
+    background: linear-gradient(top, #fafafa 0%, #eee 100%);
+    -webkit-border-radius: 3px;
+    border-radius: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.dd3-content:hover {
+    color: #2ea8e5;
+    background: #fff;
+}
+
+.dd-dragel > .dd3-item > .dd3-content {
+    margin: 0;
+}
+
+    
+.dd3-item {
+    margin: 10px 0;
+}
+.dd3-item > button {
+    margin-left: 30px;
+}
+
+.dd3-handle {
+    position: absolute;
+    margin: 0;
+    left: 0;
+    top: 0;
+    cursor: move;
+    width: 45px;
+    height: 45px;
+    text-indent: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 1px solid #aaa;
+    background: #ddd;
+    background: -webkit-linear-gradient(top, #ddd 0%, #bbb 100%);
+    background: -moz-linear-gradient(top, #ddd 0%, #bbb 100%);
+    background: linear-gradient(top, #ddd 0%, #bbb 100%);
+    border-radius: 0;
+}
+
+.dd3-handle:before {
+    content: '≡';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+    color: #fff;
+    font-size: 25px;
+    font-weight: bolder;
+}
+
+.dd3-handle:hover {
+    background: #ddd;
+}
+
+.item-edit {
+    font-size: 13px;
+    float: right;
+    color: rgb(49, 35, 248);
+    cursor: pointer;
+}
+.item-edit:hover {
+    text-decoration: underline;
+}
+
+.item-settings.d-none {
+    display: none!important;
+}
+.item-settings {
+    display: block;
+    padding: 10px;
+    position: relative;
+    z-index: 10;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    border-top: none;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+.item-settings p {
+    margin-top: 0;
+}
+
+.item-settings p label {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.item-settings p label input {
+    border: 1px solid #ddd;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+    background-color: #fff;
+    color: #32373c;
+    outline: 0;
+    border-spacing: 0;
+    width: -webkit-fill-available;
+    clear: both;
+    margin: 0;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 0;
+}
+
+.item-settings .item-delete {
+    color: #a00;
+}
+

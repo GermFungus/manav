@@ -1,0 +1,1 @@
+{"Dailymed-01":{"rules":[{"rule":{"ruleName":"Rule1","basetag":"component>structuredBody>component>section>subject>manufacturedProduct>manufacturedProduct>code>code","repeatable":1,"count":0,"indexValue":"","condition":[],"resultAction":"new_record","contcatenate":"","fproperty":"","result":[]}}]}}

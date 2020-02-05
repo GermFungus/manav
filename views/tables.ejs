@@ -1,0 +1,290 @@
+<html>
+	<head>
+		<title>Configuration</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="main_container">
+			<%-	include("partials/nav") %>
+			<div class="form-group">
+				<label for="country">Select Country</label>
+				<%-	include("partials/header") %>
+			</div>
+		</div>
+		<div class="main_container">
+			<div class="custom_table" style="display:none;">
+				
+				<div class="form-group">
+					
+					<button type="button" class="btn btn-default custom_table_button">Add Table</button>
+				</div>
+				
+			</div>
+			<button type="button" id='export-btn' class='btn btn-success'>Save</button>
+		</div>
+		<script src="/js/jquery-3.4.1.min.js"></script>
+		<script>
+			var gprop = [];
+			function remove(elem){
+				$(elem).parent('div').remove();
+			}
+			function remove_rel(elem){
+				$(elem).parent('div').remove();
+			}
+			$(document).ready(function(){
+				$('#country').on('change', function(){
+					if($(this).val() == 0){
+						window.location.reload();
+					}else{
+						$.ajax({
+							type:'POST',
+							url:'/gprop',
+							data: {country : $('#country').val()}
+						}).done(function(data){
+							gprop = data;
+							
+						})
+						$.ajax({
+							type:'POST',
+							url:'/checkfile-table',
+							data: {country : $('#country').val()}
+						}).done(function(resp){
+							//console.log(resp);
+							if(resp == 0){
+								$('.custom_table').show();
+							}else{
+								var data = JSON.parse(resp);
+								var relations = data.realtions;
+								var str = '';
+								var option = [];
+								relations.forEach(function(n1){
+									option.push(n1.name);
+								})
+								var option1 = ["1:1","1:n","n:n"];
+								var st1 = 0
+								relations.forEach(function(n1){
+								st1++;
+									var prop_array = n1.prop_structure;
+									str += '<div class="form-group table_stucture"><label>Name</label><input type="text" name="table_name" value="'+n1.name+'"><span class="delete" onclick="remove(this)">X</span>';
+									str+= '<div class="type"><label>Select Type: -</label>';
+									if(n1.schema_type == 'embeded'){
+										str+= '<input type="radio" value="embeded" name="document'+st1+'" checked/>&nbsp;&nbsp;Embeded Document&nbsp;&nbsp;';
+									}else{
+										str+= '<input type="radio" value="embeded" name="document'+st1+'"/>&nbsp;&nbsp;Embeded Document&nbsp;&nbsp;';
+									}
+									if(n1.schema_type == 'single'){
+										str+= '<input type="radio" value="single" name="document'+st1+'" checked/>&nbsp;&nbsp;Single Document';
+									}else{
+										str+= '<input type="radio" value="single" name="document'+st1+'" />&nbsp;&nbsp;Single Document';
+									}
+									if(n1.schema_type == 'embeded'){
+										str+= '<p class="dynamic_type"><select class="form-control type_table"><option value="0"> - Select Table - </option>';
+										for(var i=0;i<option.length;i++){
+											if(n1.name != option[i]){
+												if(n1.schema_type_table == option[i]){
+													str+= '<option value="'+option[i]+'" selected>'+option[i]+'</option>';
+												}else{
+													str+= '<option value="'+option[i]+'">'+option[i]+'</option>';
+												}
+											}
+										}
+										str+= '</select></p>';
+									}
+									
+									str+= '</div><div class="prop_structure"><h3>Select Properties</h3><ul>';
+									gprop.forEach(function(data){
+										var arr = data.split(';');
+										var nstr = arr[0];
+										if(prop_array.indexOf(nstr) !== -1){
+											str+= '<li><input type="checkbox" name="prop_check" value="'+arr[0]+'" checked/>'+arr[0];
+										}else{
+											str+= '<li><input type="checkbox" name="prop_check" value="'+arr[0]+'" />'+arr[0];
+										}
+										/*if(arr.length > 1){
+											arr.shift();
+											str+= '<ul>';
+											arr.forEach(function(n1){
+											if(prop_array.indexOf(nstr+'-'+n1) !== -1){
+												str+= '<li><input type="checkbox" name="prop_check" value="'+nstr+'-'+n1+'" checked/>'+n1+'</li>';
+											}else{
+												str+= '<li><input type="checkbox" name="prop_check" value="'+nstr+'-'+n1+'" />'+n1+'</li>';
+											}
+											})
+											str+= '</ul>';
+										}*/
+										str+= '</li>'
+									})
+									str+= '</ul>';
+									str+= '</div>';
+									str += '<div class="relation"><button class="add_relation btn btn-default">Add Relation</button>';
+									if(n1.relation.length > 0){
+										n1.relation.forEach(function(n2){
+											str += '<div class="form-group relation_table"><label>Select Table</label><span class="delete" onclick="remove_rel(this)">X</span><select class="form-control relation_table_name"><option value="0">- Select -</option>';
+											for(var i=0;i<option.length;i++){
+												if(n1.name != option[i]){
+													if(n2.table_name == option[i]){
+														str+= '<option value="'+option[i]+'" selected>'+option[i]+'</option>';
+													}else{
+														str+= '<option value="'+option[i]+'">'+option[i]+'</option>';
+													}
+												}
+											}
+											
+											str+= '</select><label>Select Property</label><select class="form-control prop_select"><option value="0">- Select -</option>';
+											if(n2.table_property != ''){
+												relations.forEach(function(sn){
+													if(sn.name == n2.table_name){
+														sn.prop_structure.forEach(function(sn1){
+															
+															if(sn1 == n2.table_property){
+																str+= '<option value="'+sn1+'" selected>'+sn1+'</option>';
+															}else{
+																str+= '<option value="'+sn1+'">'+sn1+'</option>';
+															}
+															
+														})
+													}
+												})
+											}
+											str+= '</select><label>Select Relation</label><select class="form-control relation_table_value"><option value="0">- Select -</option>';
+											for(var i=0;i<option1.length;i++){
+												if(n2.table_relation == option1[i]){
+													str+= '<option value="'+option1[i]+'" selected>'+option1[i]+'</option>';
+												}else{
+													str+= '<option value="'+option1[i]+'">'+option1[i]+'</option>';
+												}
+											}
+											str+= '</select></div>';
+										})
+									}
+									
+									str+= '</div></div>';
+								})
+								$('.custom_table').append(str);
+								$('.custom_table').show();
+							}
+						})
+					}
+				})
+				var st = 0;
+				$('.custom_table_button').on('click', function(){
+					st++;
+					var str = '<div class="form-group table_stucture"><label>Name</label><input type="text" name="table_name"><span class="delete" onclick="remove(this)">X</span>';
+					str+= '<div class="type"><label>Select Type: -</label><input type="radio" value="embeded" name="document'+st+'" />&nbsp;&nbsp;Embeded Document&nbsp;&nbsp;<input type="radio" value="single" name="document'+st+'" checked/>&nbsp;&nbsp;Single Document</div>';
+					str+= '<div class="prop_structure"><h3>Select Properties</h3><ul>';
+					gprop.forEach(function(data){
+						var arr = data.split(';');
+						var nstr = arr[0];
+						str+= '<li><input type="checkbox" name="prop_check" value="'+arr[0]+'" />'+arr[0];
+						/*if(arr.length > 1){
+							arr.shift();
+							str+= '<ul>';
+							arr.forEach(function(n1){
+								str+= '<li><input type="checkbox" name="prop_check" value="'+nstr+'-'+n1+'" />'+n1+'</li>';
+							})
+							str+= '</ul>';
+						}*/
+						str+= '</li>'
+					})
+					str+= '</ul>';
+					str+= '</div><div class="relation"><button class="add_relation btn btn-default">Add Relation</button></div>';
+					str+= '</div>';
+					$('.custom_table').append(str);
+				})
+				
+				$(document).on('click', '.add_relation', function(){
+					var tab = $(this).parent('.relation').parent('.table_stucture').find('input[name="table_name"]').val();
+					var option = '<option value="0"> - Select - </option>';
+					$('input[name="table_name"]').each(function(){
+						if(tab != $(this).val()){
+							option += '<option value="'+$(this).val()+'">'+$(this).val()+'</option>';
+						}
+					})
+					var str = '<div class="form-group relation_table"><label>Select Table</label><span class="delete" onclick="remove_rel(this)">X</span><select class="form-control relation_table_name">'+option+'</select><label>Select Property</label><select class="form-control prop_select"><option value="0">- Select -</option></select><label>Select Relation</label><select class="form-control relation_table_value"><option value="0"> - Select - </option><option value="1:1">1:1</option><option value="1:n">1:n</option><option value="n:n">n:n</option></select></div>';
+					$(this).parent('.relation').append(str);
+				})
+				
+				$('#export-btn').on('click', function(){
+					var data = [];
+					var result = {};
+					result['country'] = $('#country').val();
+					result['schema_type'] = $("input[name='document']:checked").val();
+					
+					$('.table_stucture').each(function(){
+						var h = {};
+						var table = $(this).find('input[name="table_name"]').val();
+						h['name'] = table;
+						h['schema_type'] = $(this).find('input[type="radio"]:checked').val();
+						if(h['schema_type'] == 'embeded'){
+							h['schema_type_table'] = $(this).find('.type_table').val();
+						}
+						h['relation'] = [];
+						h['prop_structure'] = [];
+						$(this).find('input[name="prop_check"]:checked').each(function(){
+							h['prop_structure'].push($(this).val());
+						})
+						$(this).find('.relation_table').each(function(){
+							h['relation'].push({
+								'table_name' : $(this).find('.relation_table_name').val() == 0 ? '' : $(this).find('.relation_table_name').val(),
+								'table_property': $(this).find('.prop_select').val() == 0 ? '' : $(this).find('.prop_select').val(),
+								'table_relation' : $(this).find('.relation_table_value').val() == 0 ? '' : $(this).find('.relation_table_value').val()
+							})
+						})
+						data.push(h);
+					})
+					result['realtions'] = data;
+					//console.log(JSON.stringify(result));
+					$.ajax({
+						type:'POST',
+						url:'/submit-table',
+						data: {finaldata : JSON.stringify(result)}
+					}).done(function(resp){
+						
+						window.location.href = '/ways';
+					})
+				})
+				
+			})
+			
+			$(document).on('change', '.relation_table_name', function(){
+				if($(this).val() != 0){
+					var table_val = $(this).val();
+					var str = '';
+					$('input[name="table_name"]').each(function(){
+						if($(this).val() == table_val){
+							$(this).parent('.table_stucture').find('.prop_structure input[name="prop_check"]').each(function(){
+								if($(this).is(':checked')){
+									str+= '<option value="'+$(this).val()+'">'+$(this).val()+'</option>'; 
+								}
+							})
+						}
+					})
+					
+					$(this).parent('.relation_table').find('.prop_select').html('');
+					$(this).parent('.relation_table').find('.prop_select').html('<option value="0">- select -</option>'+str);
+				}else{
+					alert('Please select table first');
+				}
+			})
+			
+			$(document).on('change', 'input[type="radio"]', function(){
+				if($(this).val() == 'embeded'){
+					var tab = $(this).parent('.type').parent('.table_stucture').find('input[name="table_name"]').val();
+					console.log(tab);
+					var option = '<option value="0"> - Select Table - </option>';
+					$('input[name="table_name"]').each(function(){
+					console.log($(this).val());
+						if($(this).val() != '' && tab != $(this).val()){
+							option += '<option value="'+$(this).val()+'">'+$(this).val()+'</option>';
+						}
+					})
+					$(this).parent('.type').append('<p class="dynamic_type"><select class="form-control type_table">'+option+'</select></p>')
+				}else{
+					$(this).parent('.type').find('.dynamic_type').remove();
+				}
+			})
+			
+		</script>
+	</body>
+</html>

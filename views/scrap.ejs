@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<title>Scrap</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<h1>Select Country</h1>
+		<form action="/" method="POST">
+			<select name="country" class="country">
+				<option value='0'>Select</option>
+				<option value='usa'>USA</option>
+			</select>
+			<input type="text" value="" name="api" class="api" style="display:none;"/>
+			<input type="submit" value="submit" />
+		</form>
+		<div class="result"></div>
+	</body>
+</html>
+<script>
+$(document).ready(function(){
+	$('.country').on('change', function(){
+		if($(this).val() == 'usa'){
+			$('.api').show();
+		}else{
+			$('.api').hide();
+		}
+	})
+})
+</script>

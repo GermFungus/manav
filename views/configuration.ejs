@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>Configuration</title>
+		<link rel="stylesheet" href="/css/jquery.nestable.css">
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="main_container">
+			<h2>Predefined Properties</h2>
+			<ul class="plist">
+				<li class="btn btn-default">Country</li>
+				<li class="btn btn-default">SourceName</li>
+				<li class="btn btn-default">SourceUrl</li>
+				<li class="btn btn-default">SourceType</li>
+				<li class="btn btn-default">ResponseType</li>
+				<li class="btn btn-default">Wait</li>
+				<li class="btn btn-default">Language</li>
+				<li class="btn btn-default">Required</li>
+				<li class="btn btn-default">Replace</li>
+				<li class="btn btn-default">Split</li>
+				<li class="btn btn-default">Primary</li>
+			</ul>
+			<form id="add-item" class="row">
+				<div class="col-lg-4">
+					<input type="text" name="name" placeholder="Key" class="form-control">
+				</div>
+				<div class="col-lg-4">
+					<input type="text" name="url" placeholder="Value" class="form-control col-lg-4">
+				</div>
+				<button type="submit" class="btn btn-default">Add More Property</button>
+			</form>
+			
+			<hr/>
+			<div class="content">
+				<h3>Create Configuration</h3>
+				<div class="dd" id="nestable">
+					<ol class="dd-list"></ol>
+				</div>
+				<form action='/submit-configuration'>
+					<input type="hidden" id="nestable-output" name="menu">
+					<button type="submit" class="btn btn-default">Save</button>
+				</form>
+			</div>
+		</div>
+		<script src="/js/jquery-3.4.1.min.js"></script>
+		<script src="/js/jquery.nestable.js"></script>
+		<script src="/js/script.js"></script>
+		<script>
+			jQuery(document).ready(function($){
+				$('.plist li').on('click', function(){
+					$('#add-item input[name="name"]').val($(this).text());
+				})
+			})
+		</script>
+	</body>
+</html>

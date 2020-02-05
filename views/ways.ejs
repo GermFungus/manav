@@ -1,0 +1,2085 @@
+<html>
+	<head>
+		<title>Mapping</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="main_container">
+			<%-	include("partials/nav") %>
+			<div class="form-group">
+				<label for="country">Select Country</label>
+				<%-	include("partials/header") %>
+			</div>
+		</div>
+		<div class="main_container">
+			<div class="source">
+				
+			</div>
+		</div>
+		<div class="col-lg-12">
+			<div class="col-lg-6 response" style="height:400px;overflow-y:auto;">
+			</div>
+			<div class="col-lg-6 property" style="margin-right:10px;width:48%;height:400px;overflow-y:auto;display:none;overflow-wrap: break-word;">
+				<button class="assign_val btn btn-default">Assign</button>
+			</div>
+		</div>
+
+		<div class="record_modal modal" tabindex="-1" role="dialog" data-backdrop="static">
+		  <div class="modal-dialog" role="document" style="width:1000px;">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" style="float:left;">Record Rule</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body" style="float:left;width:100%;">
+				<div class="col-md-12">
+					<div class="rrule">
+						<div class="form-group row">
+							<label class="col-md-2">Source</label>
+							<div class="col-md-5">
+								<input type="text" id="source_name" class="form-control" readonly>
+							</div>
+						</div>
+						<ul class="control"><li class='new_item'><img src="/images/new_item.png" >New</li><li class="delete_item"><img src="/images/delete.png" >Delete</li></ul>
+						<div class="rule_div">
+							<div class="rule_item">
+								<h5>Name</h5>
+								<ul>
+								</ul>
+							</div>
+							<div class="desc_item">
+								<h5>Description</h5>
+								<div class="content" id="content1">
+									<div class="form-group col-md-12">
+										<label class="col-md-3">Add Base Tag</label>
+										<div class="col-md-7">
+											<input type="text" class="form-control basetag" />
+										</div>
+										<div class="col-md-2">
+											<button class="choose_tag btn btn-default">Choose</button>
+										</div>
+									</div>
+									<div class="form-group col-md-12">
+										<div class="col-md-1"><input type="checkbox" class="form-control is_retable" /></div>
+										<div class="col-md-3 row">
+											<label>Is repeatable</label>
+										</div>
+										<div class="col-md-1"><input type="checkbox" class="form-control use_count" /></div>
+										<div class="col-md-2 row">
+											<label>Need Count</label>
+										</div>
+										<div class="col-md-1"><input type="checkbox" class="form-control use_indexof" /></div>
+										<div class="col-md-3 row">
+											<label>Need IndexOf</label>
+										</div>
+										<div class="col-md-2 row">
+											<input type="number" class="form-control index" style="display:none;"/>
+										</div>
+									</div>
+									
+									<div class="form-group col-md-12">
+										<div class="col-md-1"><input type="checkbox" class="form-control use_condition" /></div>
+										<div class="col-md-8 row">
+											<label>Use Condition</label>
+										</div>
+									</div>
+									
+									<div class="form-group col-md-12 result">
+										<label class="col-md-3">Result</label>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			  </div>
+			  <div class="modal-footer">
+				
+				<button type="button" class="btn btn-primary record_rule_save">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div class="hidden">
+			<div class="content">
+				<div class="form-group col-md-12">
+					<label class="col-md-3">Add Base Tag</label>
+					<div class="col-md-7">
+						<input type="text" class="form-control basetag" />
+					</div>
+					<div class="col-md-2">
+						<button class="choose_tag btn btn-default">Choose</button>
+					</div>
+				</div>
+				<div class="form-group col-md-12">
+					<div class="col-md-1"><input type="checkbox" class="form-control is_retable" /></div>
+					<div class="col-md-3 row">
+						<label>Is repeatable</label>
+					</div>
+					<div class="col-md-1"><input type="checkbox" class="form-control use_count" /></div>
+					<div class="col-md-2 row">
+						<label>Need Count</label>
+					</div>
+					<div class="col-md-1"><input type="checkbox" class="form-control use_indexof" /></div>
+					<div class="col-md-3 row">
+						<label>Need IndexOf</label>
+					</div>
+					<div class="col-md-2 row">
+						<input type="number" class="form-control index" style="display:none;"/>
+					</div>
+				</div>
+				<div class="form-group col-md-12">
+					<div class="col-md-1"><input type="checkbox" class="form-control use_condition" /></div>
+					<div class="col-md-8 row">
+						<label>Use Condition</label>
+					</div>
+				</div>
+				<div class="form-group col-md-12 record_condition" style="display:none;">
+				</div>
+				<div class="form-group col-md-12 result">
+					<label class="col-md-2">Result</label>
+					<div class="col-md-4 row">
+						<select class="form-control inputRecord">
+							<option value=''>Choose...</option>
+							<option value="remove">Remove</option>
+							<option value="concat">Concatenate</option>
+							<option value="new_record">New Record</option>
+							<option value="update_record">Update Record</option>
+							<option value="new_record_split">New Record After Split</option>
+						</select>
+					</div>
+					<div class="col-md-2"><input type="text" placeholder="Delimeter" class="form-control con_delimeter" style="display:none;"></div>
+				</div>
+				<div class="form-group col-md-12 record_resultant" style="display:none;">
+					
+				</div>
+				<div class="form-group col-md-12 record_final" style="display:none;">
+					<label class="col-md-3">Final Property</label>
+					<div class="col-md-6 row">
+						<select class="form-control inputfinal">
+							<option value=''>Choose...</option>
+							
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="resultant" style="display:none;">
+			<div class="rrecord">
+				<div class="form-group col-md-2 right">
+				  <select class="form-control inputType">
+					<option value="">Choose...</option>
+					<option value="sources">Sources</option>
+					<option value="property">Property</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right">
+				  <select class="form-control inputValue">
+					<option value="">Choose...</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+				  <input type="text" class="form-control inputTag" placeholder="Add Tag"/>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+				  <select class="form-control inputDirect">
+					<option value="">Choose...</option>
+					<option value="1">New</option>
+					<option value="2">Same</option>
+					<option value="3">Empty</option>
+					<option value="4">New With A to Z</option>
+					<option value="5">New With Split</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="line-height:35px;">
+				  <a href="javascript:void(0)" class="add_item_result">Add</a>&nbsp;&nbsp;<a href="javascript:void(0)" class="delete_item_row">Delete</a>
+				</div>
+			</div>
+		</div>
+		<div class="rule_data" style="display:none;">
+			<div class="condition">
+				<div class="form-group col-md-2 right">
+				  <select class="form-control inputType">
+					<option value="">Choose...</option>
+					<option value="sources">Sources</option>
+					<option value="property">Property</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right">
+				  <select class="form-control inputValue">
+					<option value="">Choose...</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+				  <input type="text" class="form-control inputTag" placeholder="Add Tag"/>
+				</div>
+				<div class="form-group col-md-2 right">
+				  <select class="form-control inputAction">
+					<option value="">Choose...</option>
+					<option value="1">Greater Than</option>
+					<option value="2">Less Than</option>
+					<option value="3">Equals To</option>
+					<option value="4">Not Equals To</option>
+					<option value="5">Contains</option>
+					<option value="6">Not Contains</option>
+					<option value="7">Is Multiple</option>
+					<option value="8">Is Single</option>
+					<option value="9">Is Empty</option>
+					<option value="10">Url</option>
+					<option value="11">Have</option>
+					<option value="12">Not Have</option>
+					<option value="13">startsWith</option>
+					<option value="14">Up to Next</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+					  <select class="form-control inputType1">
+						<option value="">Choose...</option>
+						<option value="sources">Sources</option>
+						<option value="property">Property</option>
+						<option value="custom">Custom</option>
+					  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+				  <select class="form-control inputValue1">
+					<option value="">Choose...</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+				  <input type="text" class="form-control inputTag1" placeholder="Add Tag"/>
+				</div>
+				<div class="form-group col-md-2 right" style="display:none;">
+				  <input type="text" class="form-control customValue1" placeholder="Value"/>
+				</div>
+				
+				<div class="form-group col-md-2">
+				  <select class="form-control inputCondition">
+					<option value="And">And</option>
+					<option value="Or">Or</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-2 right" style="line-height:35px;">
+				  <a href="javascript:void(0)" class="add_item_row">Add</a>&nbsp;&nbsp;<a href="javascript:void(0)" class="delete_item_row">Delete</a>
+				</div>
+			</div>
+		</div>
+		<div class="assign_modal modal" tabindex="-1" role="dialog" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" style="float:left;">Assign to Property</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body">
+				
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-primary set_rule" style="float:left;" disabled>Set Rule</button>
+				<button type="button" class="btn btn-primary set_assignment">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<div class="set_rule_modal modal" tabindex="-1" role="dialog" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" style="float:left;">Set Rule For Property</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body">
+				
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-primary set_rule_with_assign">Save changes</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<div class="get_rule_modal modal" tabindex="-1" role="dialog" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" style="float:left;">Property Value</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div><input type="hidden" id="key_remove">
+			  <div class="modal-body">
+				
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-danger get_remove">Remove</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		
+		<div class="free_modal modal" tabindex="-1" role="dialog" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" style="float:left;"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div><input type="hidden" id="key_remove">
+			  <div class="modal-body">
+				
+			  </div>
+			  <div class="modal-footer">
+				<!-- <button type="button" class="btn btn-danger get_remove">Remove</button> -->
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div class="source_modal modal" tabindex="-1" role="dialog" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<h5 class="modal-title" style="float:left;">Source Response</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body" style="float:left;width:100%;max-height:400px;overflow:auto;">
+				<input type="hidden" class="tag_div" />
+				<div class="col-md-12">
+					<div class="rsource">
+						
+					</div>
+				</div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Add</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<script src="/js/jquery-3.4.1.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script>
+		var sources = [];
+		var property = [];
+		$(document).on('click', '.desc_item input, .desc_item button', function(){
+			if($('.rule_item li').length == 0){
+				alert('Please select the rule name first');
+				return false;
+			}
+		})
+		$(document).ready(function(){
+			$('#country').on('change', function(){
+				if($(this).val() != 0){
+					$.ajax({
+						type:'POST',
+						url:'/get-source',
+						data: {country:$(this).val()}
+					}).done(function(resp){
+						var str = '';
+						str+= '<h4>Choose Source</h4>';
+						resp.forEach(function(elem){
+							sources.push(elem.name);
+							str+= '<div class="form-group">';
+							str+= '<input type="checkbox" value="'+elem.url+'" name="source_checkbox" data-name="'+elem.name+'" data-type="'+elem.responsetype+'">'+elem.name+'( Url: '+elem.url+')';
+							if(elem.variable1 != ''){
+								str+= '<span class="varible" style="margin-left:15px;"><label style="margin-right:10px;">'+elem.variable1+':</label>';
+								if(elem.defaultvalue1!=''){
+									str+= '<input type="text" value="'+elem.defaultvalue1+'" name="variable1" style="width:300px;"></span>';
+								}else{
+									str+= '<input type="text" name="variable1" style="width:300px;"></span>';
+								}
+							}
+							if(elem.variable2 != ''){
+								str+= '<span class="varible" style="margin-left:15px;"><label style="margin-right:10px;">'+elem.variable2+':</label>';
+								if(elem.defaultvalue2!=''){
+									str+= '<input type="text" value="'+elem.defaultvalue2+'" name="variable2" style="width:300px;"></span>';
+								}else{
+									str+= '<input type="text" name="variable2" style="width:300px;"></span>';
+								}
+								
+							}
+							str+= '</div>';
+							
+						})
+						str+= '<button class="btn btn-danger record_rule">Record Rule</button>&nbsp;&nbsp;&nbsp;';
+						str+= '<button class="btn btn-success execute_source">Execute</button>';
+						$('.source').html('');
+						$('.source').append(str);
+						
+					});
+					
+					$.ajax({
+						type:'POST',
+						url:'/gpropw',
+						data: {country : $('#country').val()}
+					}).done(function(data){
+						
+						var data1 = data.data;
+						var ass_arr = data.assigend_array;
+						
+						var str = '';
+						str+= '<div class="prop_structure"><ul>';
+						data1.forEach(function(elem){
+							var arr = elem.split(';');
+							property.push(arr[0]);
+							//for (const [key, value] of Object.entries(ass_arr)) {
+								if(ass_arr.hasOwnProperty(arr[0])){
+									str+= '<li><input type="checkbox" name="prop_check" value="'+arr[0]+'" checked disabled style="height:27px;"/>'+arr[0];
+									str+= '<span class="btn btn-danger" onClick="get_input('
+									str+= "'"+arr[0]+"'";
+									str+= ')" style="margin-left:10px;">Assigned</span>';
+								}else{
+									str+= '<li><input type="checkbox" name="prop_check" value="'+arr[0]+'" />'+arr[0];
+								}
+							//}
+							
+							str+= '</li>';
+						})
+						str+= '</ul>';
+						str+= '</div>';
+						$('.assign_modal .modal-body').html('');
+						$('.assign_modal .modal-body').html(str);
+					})
+				
+					
+					
+				}else{
+					$('.source').html('');
+				}
+			})
+			
+		})
+		
+		$(document).on('click', 'input[name="source_checkbox"]', function(){
+			var i = 0;
+			$('input[name="source_checkbox"]').each(function(){
+				if ($(this).is(":checked")) {
+					i++;
+				} 
+			})
+			if(i > 1){
+				alert('Please use one source at a time');
+				return false;
+			}
+		})
+		var str = '';
+		var tree = [];
+		function allDescendants (node) {
+			if(node.tagName){
+			
+				str += '<ul>';
+				str += '<li><input type="checkbox" value="'+tree.join('>')+'" />'+ node.tagName;
+				if(node.attributes.length > 0){
+					str += '<ul>';
+					for(var k=0; k < node.attributes.length; k++){
+						str += '<li><input type="checkbox" value="'+tree.join('>')+'>'+node.attributes.item(k).nodeName+'" />'+node.attributes.item(k).nodeName+'</li>';
+					}
+					str +='</ul>';
+			   }
+				if(node.childNodes.length > 0){
+					for (var i = 0; i < node.childNodes.length; i++) {
+						var child = node.childNodes[i];
+						if(child.tagName){
+							tree.push(child.tagName);
+							//console.log(tree);
+						}
+						allDescendants(child);
+					}
+				}else{
+					str += '</li>';
+				}
+				str += '</ul>';
+				tree.pop();
+				
+				
+			}
+			
+		}
+		$(document).on('click', '.record_rule', function(){
+			str = '';
+			var i = 0;
+			$('input[name="source_checkbox"]').each(function(){
+				if ($(this).is(":checked")) {
+					i++;
+				} 
+			})
+			var check = true;
+			if(i==0){
+				alert('Please choose at least one source');
+				return false;
+			}else{
+				$('.rsource').html('');
+				$('.rsource').html('<h5>Loading...</h5>');
+				
+				var result = {};
+				var source_name = '';
+				$('input[name="source_checkbox"]').each(function(){
+					if ($(this).is(":checked")) {
+						result['sourceurl'] = $(this).val();
+						result['responsetype'] = $(this).attr('data-type');
+						source_name = $(this).attr('data-name');
+						$('#source_name').val($(this).attr('data-name'));
+						$(this).parent('.form-group').find('.varible').each(function(){
+							if($(this).find('input').val() == ''){
+								alert('Please insert variable value');
+								check = false;
+								return false;
+							}else{
+								var lab = $(this).find('label').text().replace(':','');
+								result[lab] = $(this).find('input').val();
+							}
+						});
+					} 
+				})
+				if(check){
+					$.ajax({
+						type:'POST',
+						url:'/get-record-rule',
+						data:{country: $('#country').val(), source: source_name}
+					}).done(function(resp){
+						if(resp != 0){
+							$('.rule_div .rule_item li').remove();
+				
+							resp.rules.forEach(function(elem){
+								$('.rule_div .rule_item ul').append('<li>'+elem.rule.ruleName+'</li>');
+								$('.rule_div .rule_item li').each(function(){
+									if($(this).text() == elem.rule.ruleName){
+										$(this).data('rule_data', elem);
+									}
+								})
+							})
+							
+							$('.rule_item ul li:last-child').addClass('active');
+							$('.rule_item li').each(function(){
+								if($(this).hasClass('active')){
+									$('.desc_item .content').remove();
+									$('.record_condition .condition').remove();
+									$('.record_resultant .rrecord').remove();
+										var data = $(this).data('rule_data');	
+										
+										for (const [key, value] of Object.entries(data)) {
+											console.log(value);
+												var id = 'content1';
+												$('.hidden > .content').attr('id', id);
+												var str = $('.hidden').html();
+												$('.desc_item').append(str);
+												$('.hidden > .content').removeAttr('id');
+												var clas = $('.desc_item #'+id);
+												clas.find('.basetag').val(value.basetag);
+												if(value.repeatable == 1){
+													clas.find('.is_retable').prop('checked', true);							
+												}
+												if(value.count == 1){
+													clas.find('.use_count').prop('checked', true);							
+												}
+												if(value.indexValue != ''){
+													clas.find('.index').val(value.indexValue);	
+													clas.find('.use_indexof').prop('checked', true);	
+													clas.find('.index').show();
+												}
+												console.log(value.condition);
+												if(value.condition.length > 0){
+													clas.find('.use_condition').prop('checked', true);
+													clas.find('.record_condition').show();
+													var i = 1;
+													value.condition.forEach(function(elem){
+														var id1 = 'condition'+i;
+														$('.rule_data > .condition').attr('id', id1);
+														if(i == 1){
+															$('.rule_data > .condition .delete_item_row').hide();
+														}else{
+															$('.rule_data > .condition .delete_item_row').show();
+														}
+														var str = $('.rule_data').html();
+														$('.record_condition').append(str);
+														$('.rule_data > .condition').removeAttr('id');
+														$('#'+id1).find('.inputType option[value="'+elem.type+'"]').prop('selected',true);
+														if(elem.type == 'sources'){
+															var str1 = '<option value="">Choose..</option>';
+															sources.forEach(function(elem1){
+																str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+															})
+															
+															$('#'+id1).find('.inputValue').empty().append(str1);
+															
+														}else if(elem.type == 'property'){
+															var str1 = '<option value="">Choose..</option>';
+															property.forEach(function(elem2){
+																str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+															})
+															
+															$('#'+id1).find('.inputValue').empty().append(str1);
+														}
+														$('#'+id1).find('.inputValue option[value="'+elem.typeValue+'"]').prop('selected', true);
+														
+														if(elem.tag != ''){
+															$('#'+id1).find('.inputTag').val(value.tag);
+															$('#'+id1).find('.inputTag').show();
+														}
+														$('#'+id1).find('.inputAction option[value="'+elem.action+'"]').prop('selected', true);
+														$('#'+id1).find('.inputType1 option[value="'+elem.type1+'"]').prop('selected',true);
+														$('#'+id1).find('.inputType1').parent('div').show();
+														if(elem.type1 == 'sources'){
+															var str1 = '<option value="">Choose..</option>';
+															sources.forEach(function(elem1){
+																str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+															})
+															
+															$('#'+id1).find('.inputValue1').empty().append(str1);
+															$('#'+id1).find('.inputValue1 option[value="'+elem.typeValue1+'"]').prop('selected', true);
+															$('#'+id1).find('.inputValue1').parent('div').show();
+															
+														}else if(elem.type1 == 'property'){
+															var str1 = '<option value="">Choose..</option>';
+															property.forEach(function(elem2){
+																str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+															})
+															
+															$('#'+id1).find('.inputValue1').empty().append(str1);
+															$('#'+id1).find('.inputValue1 option[value="'+elem.typeValue1+'"]').prop('selected', true);
+															$('#'+id1).find('.inputValue1').parent('div').show();
+															
+														}else if(elem.type1 == 'custom'){
+															$('#'+id1).find('.inputValue1').parent('div').hide();
+															$('#'+id1).find('.customValue1').val(elem.customValue);
+															$('#'+id1).find('.customValue1').parent('div').show();
+														}
+														
+														if(elem.tag1 != ''){
+															$('#'+id1).find('.inputTag1').val(elem.tag1);
+															$('#'+id1).find('.inputTag1').parent('div').show();
+														}
+														$('#'+id1).find('.inputCondition option[value="'+elem.operator+'"]').prop('selected', true);
+																			
+														i++;
+													})
+												}
+												
+												clas.find('.inputRecord option[value="'+value.resultAction+'"]').prop('selected', true);
+												var str1 = '<option value="">Choose..</option>';
+												property.forEach(function(elem2){
+													str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+												})
+												
+												clas.find('.inputfinal').empty().append(str1);
+												if(value.resultAction == 'concat'){
+													clas.find('.con_delimeter').val(value.contcatenate);
+													clas.find('.con_delimeter').show();
+													clas.find('.inputfinal').parent('div').parent('div').show();
+												}
+												if(value.fproperty != ''){
+													clas.find('.inputfinal option[value="'+value.fproperty+'"]').prop('selected', true);
+													clas.find('.inputfinal').parent('div').parent('div').show();
+												}
+												var k = 1
+												if(value.result.length > 0){
+													clas.find('.record_resultant').show();
+												}
+												value.result.forEach(function(elem){
+													var id1 = 'rrecord'+k;
+													$('.resultant > .rrecord').attr('id', id1);
+													if(k == 1){
+														$('.resultant > .rrecord .delete_item_row').hide();
+													}else{
+														$('.resultant > .rrecord .delete_item_row').show();
+													}
+													var str = $('.resultant').html();
+													$('.record_resultant').append(str);
+													$('.resultant > .rrecord').removeAttr('id');
+													$('#'+id1).find('.inputType option[value="'+elem.type+'"]').prop('selected',true);
+													
+													if(elem.type == 'sources'){
+														var str1 = '<option value="">Choose..</option>';
+														sources.forEach(function(elem1){
+															str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+														})
+														
+														$('#'+id1).find('.inputValue').empty().append(str1);
+														
+													}else if(elem.type == 'property'){
+														var str1 = '<option value="">Choose..</option>';
+														property.forEach(function(elem2){
+															str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+														})
+														
+														$('#'+id1).find('.inputValue').empty().append(str1);
+														
+													}
+													$('#'+id1).find('.inputValue option[value="'+elem.typeValue+'"]').prop('selected', true);
+													if(elem.tag != ''){
+														$('#'+id1).find('.inputTag').val(value.tag);
+														$('#'+id1).find('.inputTag').show();
+													}
+													
+													if(value.resultAction != 'concat'){
+														$('#'+id1).find('.inputDirect option[value="'+elem.format+'"]').prop('selected', true);
+														$('#'+id1).find('.inputDirect').parent('div').show();
+													}else{
+														$('#'+id1).find('.inputDirect').parent('div').hide();
+													}
+													
+													k++;
+												})
+
+											}
+								}else{
+								
+									$('.desc_item .content').remove();
+									$('.record_condition .condition').remove();
+									$('.record_resultant .rrecord').remove();
+									var id = 'content1';
+									$('.hidden > .content').attr('id', id);
+									var str = $('.hidden').html();
+									$('.desc_item').append(str);
+									$('.hidden > .content').removeAttr('id');
+									$('.con_delimeter').val('');
+									$('.con_delimeter').hide();
+									$('.record_final').hide();
+								}
+							})
+							
+						}
+					})
+				
+				
+				
+					$.ajax({
+						type:'POST',
+						url:'/get-api-response',
+						data:{findalData: JSON.stringify(result)}
+					}).done(function(resp){
+						
+						var parser = new DOMParser();
+						var doc = parser.parseFromString(resp, 'text/xml');
+						var rootElement = doc.documentElement;
+							var children = rootElement.childNodes;
+							for(var i =0; i< children.length; i++) {
+							   var child = children[i];
+							   // <studen> Element
+							   if(child.nodeType == Node.ELEMENT_NODE)  {
+									if(child.childNodes.length > 0){
+										tree = [];
+										tree.push(child.tagName);
+										allDescendants(child);
+									}else{
+									   str += '<ul>';
+									   str += '<li><input type="checkbox" value="'+child.tagName+'" />'+child.tagName;
+									   if(child.attributes.length > 0){
+											str += '<ul>';
+											for(var k=0; k < child.attributes.length; k++){
+												str += '<li><input type="checkbox" value="'+child.tagName+'>'+child.attributes.item(k).nodeName+'" />'+child.attributes.item(k).nodeName+'</li>';
+											}
+											str +='</ul>';
+									   }
+									   
+									   str += '</li>';
+									   str += '</ul>';
+								   }
+								   
+							   }
+							}
+						
+						$('.rsource').html('');
+						$('.rsource').html(str);
+						$('.response').html('');
+						$('.response').html('<h4>Response</h4>'+str);
+						$('.record_modal').modal('show');
+					})
+				}
+			}
+		})
+		$(document).on('click', '.execute_source', function(){
+			str = '';
+			var i = 0;
+			$('input[name="source_checkbox"]').each(function(){
+				if ($(this).is(":checked")) {
+					i++;
+				} 
+			})
+			var check = true;
+			if(i==0){
+				alert('Please choose at least one source');
+				return false;
+			}else{
+				var result = {};
+				$('input[name="source_checkbox"]').each(function(){
+					if ($(this).is(":checked")) {
+						result['sourceurl'] = $(this).val();
+						result['responsetype'] = $(this).attr('data-type');
+						$(this).parent('.form-group').find('.varible').each(function(){
+							if($(this).find('input').val() == ''){
+								alert('Please insert variable value');
+								check = false;
+								return false;
+							}else{
+								var lab = $(this).find('label').text().replace(':','');
+								result[lab] = $(this).find('input').val();
+							}
+						});
+					} 
+				})
+				if(check){
+					$.ajax({
+						type:'POST',
+						url:'/get-api-response',
+						data:{findalData: JSON.stringify(result)}
+					}).done(function(resp){
+						
+						var parser = new DOMParser();
+						var doc = parser.parseFromString(resp, 'text/xml');
+						var rootElement = doc.documentElement;
+							var children = rootElement.childNodes;
+							for(var i =0; i< children.length; i++) {
+							   var child = children[i];
+							   // <studen> Element
+							   if(child.nodeType == Node.ELEMENT_NODE)  {
+									if(child.childNodes.length > 0){
+										tree = [];
+										tree.push(child.tagName);
+										allDescendants(child);
+									}else{
+									   str += '<ul>';
+									   str += '<li><input type="checkbox" value="'+child.tagName+'" />'+child.tagName;
+									   if(child.attributes.length > 0){
+											str += '<ul>';
+											for(var k=0; k < child.attributes.length; k++){
+												str += '<li><input type="checkbox" value="'+child.tagName+'>'+child.attributes.item(k).nodeName+'" />'+child.attributes.item(k).nodeName+'</li>';
+											}
+											str +='</ul>';
+									   }
+									   
+									   str += '</li>';
+									   str += '</ul>';
+								   }
+								   
+							   }
+							}
+						
+						$('.response').html('');
+						$('.response').html('<h4>Response</h4>'+str);
+						
+					})
+				}
+			}
+			
+		})
+		
+		$(document).on('click', '.response input[type="checkbox"]', function(){
+			if($(this).parent("li").hasClass('selected')){
+				var va = $(this).val();
+				$(this).parent("li").removeClass('selected');
+				$('.property li').each(function(){
+					if($(this).text() == va){
+						$(this).remove();
+					}
+				})
+			}else{
+				$(this).parent("li").addClass('selected');
+				$('.property').append('<li style="list-style:disc;">'+$(this).val()+'</li>');
+			}
+			
+			$('.property').show();
+			return false;
+		})
+		
+		$('.assign_val').on('click', function(){
+			var i = 0;
+			$('.response input[type="checkbox"]').each(function(){
+				if ($(this).parent("li").hasClass('selected')) {
+					i++;
+				} 
+			})
+			if(i== 0){
+				alert('Please select the input form the sample response.');
+				return false;
+			}else{
+				$('.set_rule').attr("disabled", true);
+				if(i>1){
+					$('.set_assignment').attr('disabled', true);
+				}else{
+					$('.set_assignment').attr('disabled', false);
+				}
+				$('.assign_modal').modal('show');
+			}
+		})
+		
+		$('.set_rule').on('click', function(){
+			var i = 0;
+			$('.prop_structure input[type="checkbox"]').each(function(){
+				if($(this).hasClass('setP')){
+					i++;
+				}
+			})
+			if(i>0){
+				var ii = 0;
+				$('.response input[type="checkbox"]').each(function(){
+					if($(this).parent("li").hasClass('selected')){
+						ii++;
+					}
+				})
+				if(ii > 1){
+					var str = '';
+					str+= '<div class="form-group">';
+					str+= '<label>Add Delimeter to Concatenate the value</label>';
+					str+= '<input type="text" id="con_dem" class="form-control">';
+					str+= '</div>';
+					$('.set_rule_modal .modal-body').html('');
+					$('.set_rule_modal .modal-body').html(str);
+					$('.set_rule_modal').modal('show');
+				}else if(ii == 1 && i < 3){
+					var str = '';
+					str+= '<div class="form-group">';
+					str+= '<label>Add Delimeter to Split the value</label>';
+					str+= '<input type="text" id="split_dem" class="form-control"><br/>';
+					str+= '<select class="form-control occurrence"><option>- Choose Occurrence - </option><option value="first">Form First</option><option value="last">From Last</option></select><br/>';
+					//if(i > 1 && i < 3){
+						str+= '<label>Value after delimeter split</label>';
+						$('.prop_structure input[type="checkbox"]').each(function(){
+							if($(this).hasClass('setP')){
+								str+= '<p>'+$(this).val()+'&nbsp;&nbsp;<select class="form-control '+$(this).val()+'_split_element"><option>- Choose Value - </option><option value="1">1</option><option value="2">2</option></select></p>'
+							}
+						})
+					<!-- }else{ -->
+						<!-- str+= '<label>Value used</label>'; -->
+						<!-- str+= '<select class="form-control split_element"><option>- Choose Value - </option><option value="1">1</option><option value="2">2</option></select>'; -->
+					<!-- } -->
+					str+= '</div>';
+					$('.set_rule_modal .modal-body').html('');
+					$('.set_rule_modal .modal-body').html(str);
+					$('.set_rule_modal').modal('show');				
+				}
+				
+			}else{
+				alert('Select some property first.');
+			}
+		})
+		
+		$('.set_rule_modal').on('hidden.bs.modal', function () {
+			$('.srule').each(function(){
+				$(this).prop("checked", false);
+			})
+		});
+		$('.assign_modal').on('hidden.bs.modal', function () {
+			$('.prop_structure input[type="checkbox"]').each(function(){
+				if($(this).hasClass('setP')){
+					$(this).prop('checked', false);
+					$(this).removeClass('setP');
+				}
+			})
+			$('.response input[type="checkbox"]').each(function(){
+					$(this).parent("li").removeClass('selected') 
+			})
+			$('.property li').remove();
+			$('.property').hide();
+		});
+		
+		
+		$(document).on('click', '.prop_structure input[type="checkbox"]', function(){
+			if($(this).hasClass('setP')){
+				$(this).removeClass('setP');
+			}else{
+				$(this).addClass('setP');
+			}
+			
+			
+			$('.set_rule').prop("disabled", false); 
+		})
+		$(document).on('click', '.set_assignment', function(){
+			var prop = {};
+			var sample = [];
+
+			var country = $('#country').val();
+			var i = 0;
+			$('.prop_structure input[type="checkbox"]').each(function(){
+				if($(this).hasClass('setP')){
+					var propid = $(this).val();
+					$('.response input[type="checkbox"]').each(function(){
+						if($(this).parent("li").hasClass('selected')){
+							//prop[propid] = $(this).val();
+							sample.push($(this).val());
+						}
+					})
+					
+					//prop[propid] = sample;
+					prop[propid] = {};
+					prop[propid]['sample'] = sample;
+					i++;
+				}
+			})
+			
+			if(sample.length > 0 && sample.length < 2){
+				$.ajax({
+					type:'POST',
+					url:'/make-config',
+					data:{country: country, setproperty: JSON.stringify(prop)}
+				}).done(function(resp){
+					console.log(resp);
+					$('.prop_structure input[type="checkbox"]').each(function(){
+						if($(this).hasClass('setP')){
+							var str = '';
+							str+= '<span class="btn btn-danger" onClick="get_input('
+							str+= "'"+$(this).val()+"'";
+							str+= ')" style="margin-left:10px;">Assigned</span>';
+							$(this).parent("li").append(str);
+							$(this).prop('disbaled', true);
+							$(this).attr('disabled','disabled');
+							$(this).css('height', '27px');
+							$(this).removeClass('setP');
+						}
+					})
+					
+					$('.response input[type="checkbox"]').each(function(){
+						//$(this).parent("li").removeClass('selected') 
+					})
+					
+				})
+			}else if(sample.length > 1){
+				alert('There is more then one response value is selected. Please select the rule first');
+			}else{
+				alert('At least select one property');
+				return false;
+			}
+		})
+		
+		function get_input(key){
+			$.ajax({
+				type:'POST',
+				url:'/get-input',
+				data:{key: key, country: $('#country').val()}
+			}).done(function(data){
+				console.log(data);
+				$('.get_rule_modal .modal-body').html('');
+				var str = '';
+				str+= '<h5><b>Value:-</b> </h5><ul>';
+				data.sample.forEach(function(elem){
+					str+= '<li>'+elem+'</li>';
+				})
+				str+= '</ul>';
+				
+				if(data.hasOwnProperty("rules")){
+					str+= '<h5><b>Rules:-</b> </h5><ul>';
+					data.rules.forEach(function(elem){
+						for (const [key, value] of Object.entries(elem)) {
+							str+= '<li>'+key+' : '+value+'</li>';
+						}
+					})
+					str+= '</ul>';	
+				}
+				$('#key_remove').val('');
+				$('#key_remove').val(key);
+				$('.get_rule_modal .modal-body').html(str);
+				$('.get_rule_modal').modal('show');
+			})
+		}
+		
+		$(document).on('click','.get_remove', function(){
+			var key = $('#key_remove').val();
+			$.ajax({
+				type:'POST',
+				url:'/remove-key',
+				data:{key: key, country: $('#country').val()}
+			}).done(function(data){
+				$('.prop_structure input[type="checkbox"]').each(function(){
+					if($(this).val() == key){
+						$(this).parent("li").find('span').remove();
+						$(this).prop('disabled',false);
+						$(this).prop('checked',false);
+						$(this).css('height','auto');
+						$('.get_rule_modal').modal('hide');
+					}
+				})
+			})
+		})
+		
+		$('.srule').on('click', function(){
+			$('.srule').each(function(){
+				$(this).prop('checked', false);
+			})
+			$(this).prop('checked',true);
+			if($(this).val() == 'concat' && $(this).is(':checked')){
+				var str = '';
+				str+= '<div class="form-group"><label>Add Concatenate Delimeter</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="con_dem"></div>'
+			}else{
+				$('#con_dem').parent(".form-group").remove();
+			}
+			
+			if($(this).val() == 'split' && $(this).is(':checked')){
+				var str = '';
+				str+= '<div class="form-group"><label>Add Split Delimeter</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="split_dem"></div>';
+				str+= '<div class="form-group"><label>Element used after split</label>&nbsp;&nbsp;&nbsp;&nbsp;<select id="split_element"><option value="1">1</option><option value="2">2</option></select></div>';
+			}else{
+				$('#split_dem').parent(".form-group").remove();
+				$('#split_element').parent(".form-group").remove();
+			}
+			
+			if($(this).val() == 'multiple' && $(this).is(':checked')){
+				var str = '';
+				str+= '<div class="form-group"><label>Concatenate Delimeter</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="multi_dem"></div>';
+				str+= '<p>OR</p>';
+				str+= '<div class="form-group"><label>Add as a new record</label>&nbsp;&nbsp;&nbsp;&nbsp;<select id="multi_element"><option value="No">No</option><option value="Yes">Yes</option></select></div>';
+			}else{
+				$('#multi_dem').parent(".form-group").remove();
+				$('#multi_element').parent(".form-group").remove();
+			}
+			
+			$('.add_column').append(str);
+		})
+		
+		$('.set_rule_with_assign').on('click', function(){
+			var prop = {};
+			
+			
+			var country = $('#country').val();
+			$('.prop_structure input[type="checkbox"]').each(function(){
+				var sample = [];
+				var srule = [];
+				if($(this).hasClass('setP')){
+					var propid = $(this).val();
+					$('.property li').each(function(){
+						//if($(this).parent("li").hasClass('selected')){
+							//prop[propid] = $(this).val();
+							sample.push($(this).text());
+						//}
+					})
+					
+					if(sample.length > 1){
+						srule.push({'concatenate': $('#con_dem').val()})
+					}else if(sample.length < 2){
+						srule.push({'split': $('#split_dem').val(), 'occurrence': $('.occurrence').val(), 'split_element': $('.'+propid+'_split_element').val()})
+					}
+					prop[propid] = {};
+					prop[propid]['sample'] = sample;
+					if(srule.length > 0){
+						prop[propid]['rules'] =srule;
+					}
+					
+				}
+			})
+			console.log(JSON.stringify(prop));
+			$.ajax({
+				type:'POST',
+				url:'/make-config',
+				data:{country: country, setproperty: JSON.stringify(prop)}
+			}).done(function(resp){
+				console.log(resp);
+				$('.srule').each(function(){
+					$(this).prop('checked',false);
+				})
+				$('.add_column').html('');
+				$('.set_rule_modal').modal('hide');
+				$('.prop_structure input[type="checkbox"]').each(function(){
+					if($(this).hasClass('setP')){
+						var str = '';
+						str+= '<span class="btn btn-danger" onClick="get_input('
+						str+= "'"+$(this).val()+"'";
+						str+= ')" style="margin-left:10px;">Assigned</span>';
+						$(this).parent("li").append(str);
+						$(this).prop('disbaled', true);
+						$(this).attr('disabled','disabled');
+						$(this).css('height', '27px');
+						$(this).removeClass('setP');
+					}
+				})
+				
+				$('.response input[type="checkbox"]').each(function(){
+					//$(this).parent("li").removeClass('selected') 
+				})
+				
+			})
+			
+		})
+		$(document).on('click', 'input[name="prop_check"]', function(){
+			var i = 0;
+			$('input[name="prop_check"]').each(function(){
+				if($(this).hasClass('setP')){
+					i++;
+				}
+			})
+			if(i > 2){
+				$('.set_rule').prop('disabled', true);
+			}else{
+				$('.set_rule').prop('disabled', false);
+			}
+		})
+		
+		
+		$(document).on('click','.choose_tag', function(){
+			$('.tag_div').val($(this).parent('div').parent('div').parent('div').attr('id'));
+			$('.source_modal').modal('show');
+		})
+		$(document).on('click', '.rsource input[type="checkbox"]', function(){
+			var i = 0;
+			$('.rsource input[type="checkbox"]').each(function(){
+				if ($(this).is(":checked")) {
+					i++;
+				} 
+			})
+			if(i > 1){
+				alert('You can select only one tag.');
+				return false;
+			}
+		})
+		$('.source_modal').on('hidden.bs.modal', function () {
+			var id = $('.tag_div').val();
+			$('.rsource input[type="checkbox"]').each(function(){
+				if ($(this).is(":checked")) {
+					$('#'+id).find('.basetag').val($(this).val());
+				} 
+			})
+			
+		})
+		$(document).on('click','.use_condition', function(){
+			if($(this).is(':checked')){
+				var len = $('.record_condition .condition').length;
+				len = len+1;
+				var id = 'condition'+len;
+				$('.rule_data > .condition').attr('id', id);
+				if(len == 1){
+					$('.rule_data > .condition .delete_item_row').hide();
+				}else{
+					$('.rule_data > .condition .delete_item_row').show();
+				}
+				var str = $('.rule_data').html();
+				$('.record_condition').append(str);
+				$('.rule_data > .condition').removeAttr('id');
+				$('.record_condition').show();
+			}else{
+				$('.record_condition .condition').remove();
+				$('.record_condition').hide();
+			}
+			
+		})
+		$(document).on('click', '.add_item_row', function(){
+			
+			var item = $('.record_condition .condition').length;
+			item = item+1;
+			var id = 'condition'+item;
+			$('.rule_data > .condition').attr('id', id);
+			$('.rule_data > .condition .delete_item_row').show();
+			var str = $('.rule_data').html();
+			$(this).parent('div').parent('div').after(str);
+			$('.rule_data > .condition').removeAttr('id');
+		})
+		$(document).on('click', '.delete_item_row', function(){
+			$(this).parent('div').parent('div').remove();
+		})
+		$(document).on('change', '.inputType', function(){
+			var str = $(this).val();
+			var clas = $(this).parent('div').parent('div').attr('id');
+			if(str != ''){
+				if(str == 'sources'){
+					var str1 = '<option value="">Choose..</option>';
+					sources.forEach(function(elem){
+						str1+= '<option value="'+elem+'">'+elem+'</option>';
+					})
+					
+					$('#'+clas+' .inputValue').empty().append(str1);
+					$('#'+clas+' .inputValue').parent('div').show();
+					$('#'+clas+' .inputTag').parent('div').show();
+					$('#'+clas+' .customValue').parent('div').hide();
+				}else if(str == 'custom'){
+					$('#'+clas+' .inputValue').parent('div').hide();
+					$('#'+clas+' .inputTag').parent('div').hide();
+					$('#'+clas+' .customValue').parent('div').show();
+				}else{
+					var str1 = '<option value="">Choose..</option>';
+					property.forEach(function(elem){
+						str1+= '<option value="'+elem+'">'+elem+'</option>';
+					})
+					
+					$('#'+clas+' .inputValue').empty().append(str1);
+					$('#'+clas+' .inputValue').parent('div').show();
+					$('#'+clas+' .inputTag').parent('div').hide();
+					$('#'+clas+' .customValue').parent('div').hide();
+				}
+				
+			}else{
+				
+				$('#'+clas+' .inputValue').empty().append('<option value="">Choose...</option>');
+				$('#'+clas+' .inputTag').parent('div').hide();
+			}
+			
+		})
+		$(document).on('change', '.inputAction', function(){
+			var str = $(this).val();
+			var clas = $(this).parent('div').parent('div').attr('id');
+			if(str!=''){
+					$('#'+clas+' .inputType1').parent('div').show();
+				
+			}else{
+				$('#'+clas+' .inputType1').parent('div').hide();
+			}
+			
+		})
+		$(document).on('change', '.inputType1', function(){
+			var str = $(this).val();
+			var clas = $(this).parent('div').parent('div').attr('id');
+			$('#'+clas+' .inputValue1 option[value=""]').prop('selected', true);
+			$('#'+clas+' .inputTag1').val('');
+			$('#'+clas+' .customValue1').val('');
+			
+			if(str != ''){
+				if(str == 'sources'){
+					var str1 = '<option value="">Choose..</option>';
+					sources.forEach(function(elem){
+						str1+= '<option value="'+elem+'">'+elem+'</option>';
+					})
+					
+					$('#'+clas+' .inputValue1').empty().append(str1);
+					$('#'+clas+' .inputValue1').parent('div').show();
+					$('#'+clas+' .inputTag1').parent('div').show();
+					$('#'+clas+' .customValue1').parent('div').hide();
+				}else if(str == 'custom'){
+					$('#'+clas+' .inputValue1').parent('div').hide();
+					$('#'+clas+' .inputTag1').parent('div').hide();
+					$('#'+clas+' .customValue1').parent('div').show();
+				}else{
+					var str1 = '<option value="">Choose..</option>';
+					property.forEach(function(elem){
+						str1+= '<option value="'+elem+'">'+elem+'</option>';
+					})
+					
+					$('#'+clas+' .inputValue1').empty().append(str1);
+					$('#'+clas+' .inputValue1').parent('div').show();
+					$('#'+clas+' .inputTag1').parent('div').hide();
+					$('#'+clas+' .customValue1').parent('div').hide();
+				}
+				
+			}else{
+				
+				$('#'+clas+' .inputValue1').empty().append('<option value="">Choose...</option>');
+				$('#'+clas+' .inputTag1').parent('div').hide();
+			}
+		})
+		$(document).on('change', '.inputRecord', function(){
+			if($(this).val() == 'concat'){
+				$('.record_resultant').html('');
+				$('.con_delimeter').val('');
+				$('.con_delimeter').show();
+				var item = $('.record_resultant .rrecord').length;
+				item = item+1;
+				var id = 'rrecord'+item;
+				$('.resultant > .rrecord').attr('id', id);
+				if(item == 1){
+					$('.resultant > .rrecord .delete_item_row').hide();
+				}else{
+					$('.resultant > .rrecord .delete_item_row').show();
+				}
+				$('.inputDirect').parent('div').hide();
+				var str = $('.resultant').html();
+				$('.record_resultant').append(str);
+				$('.resultant > .rrecord').removeAttr('id');
+				var str1 = '<option value="">Choose..</option>';
+				property.forEach(function(elem){
+					str1+= '<option value="'+elem+'">'+elem+'</option>';
+				})
+				
+				$('.inputfinal').empty().append(str1);
+				$('.inputfinal').parent('div').parent('div').show();				
+				
+				$('.record_resultant').show();
+			}else if($(this).val() == 'new_record' || $(this).val() == 'update_record' || $(this).val() == 'new_record_split'){
+				$('.con_delimeter').val('');
+				$('.con_delimeter').hide();
+				$('.record_resultant').html('');
+				var item = $('.record_resultant .rrecord').length;
+				item = item+1;
+				var id = 'rrecord'+item;
+				$('.resultant > .rrecord').attr('id', id);
+				if(item == 1){
+					$('.resultant > .rrecord .delete_item_row').hide();
+				}else{
+					$('.resultant > .rrecord .delete_item_row').show();
+				}
+				$('.inputDirect').parent('div').show();
+				var str = $('.resultant').html();
+				$('.record_resultant').append(str);
+				$('.resultant > .rrecord').removeAttr('id');
+				$('.inputfinal').parent('div').parent('div').hide();	
+				$('.record_resultant').show();
+			}else{
+				$('.con_delimeter').val('');
+				$('.con_delimeter').hide();
+				$('.record_resultant').html('');
+				$('.record_resultant').hide();
+				$('.inputDirect').parent('div').hide();
+				$('.inputfinal').parent('div').parent('div').hide();	
+				
+			}
+		})
+		$(document).on('click', '.add_item_result', function(){
+			
+				var item = $('.record_resultant .rrecord').length;
+				item = item+1;
+				var id = 'rrecord'+item;
+				$('.resultant > .rrecord').attr('id', id);
+				if(item == 1){
+					$('.resultant > .rrecord .delete_item_row').hide();
+				}else{
+					$('.resultant > .rrecord .delete_item_row').show();
+				}
+				
+				var str = $('.resultant').html();
+				$('.record_resultant').append(str);
+				$('.resultant > .rrecord').removeAttr('id');
+				if($('.inputRecord').val() != 'concat'){
+					$('.record_resultant #'+id).find('.inputDirect').parent('div').show();
+				}
+		})
+		$(document).on('click', '.use_indexof', function(){
+			if($(this).is(':checked')){
+				$('.index').show();
+			}else{
+				$('.index').hide();
+			}
+		})
+		$(document).on('click', '.record_rule_save', function(){
+			$('.rule_item li').each(function(){
+					var h = {};
+					h['rule'] = {};
+					h['rule']['ruleName'] = $(this).text();
+				if($(this).hasClass('active')){
+					h['rule']['basetag'] = $('.basetag').val();
+					if($('.is_retable').is(':checked')){
+						h['rule']['repeatable'] = 1;
+					}else{
+						h['rule']['repeatable'] = 0;
+					}
+					if($('.use_count').is(':checked')){
+						h['rule']['count'] = 1;
+					}else{
+						h['rule']['count'] = 0;
+					}
+					if($('.use_indexof').is(':checked')){
+						h['rule']['indexValue'] = $('.index').val();
+					}else{
+						h['rule']['indexValue'] = '';
+					}
+					
+					h['rule']['condition'] = [];
+					
+					if($('.use_condition').is(':checked')){
+						$('.record_condition .condition').each(function(){
+							if($(this).find('.inputType').val() != ''){
+								var k = {};
+								k['type'] = $(this).find('.inputType').val();
+								k['typeValue'] = $(this).find('.inputValue').val();
+								k['tag'] = $(this).find('.inputTag').val();
+								k['action'] = $(this).find('.inputAction').val();
+								k['type1'] = $(this).find('.inputType1').val();
+								k['typeValue1'] = $(this).find('.inputValue1').val();
+								k['tag1'] = $(this).find('.inputTag1').val();
+								k['customValue'] = $(this).find('.customValue1').val();
+								k['operator'] = $(this).find('.inputCondition').val();
+								h['rule']['condition'].push(k);
+							}
+						})
+					}
+					
+					h['rule']['resultAction'] = $('.inputRecord').val();
+					h['rule']['contcatenate'] = $('.con_delimeter').val();
+					h['rule']['fproperty'] = $('.inputfinal').val();
+					h['rule']['result'] = [];
+					$('.record_resultant .rrecord').each(function(){
+						if($(this).find('.inputType').val() != ''){
+							var k = {};
+							k['type'] = $(this).find('.inputType').val();
+							k['typeValue'] = $(this).find('.inputValue').val();
+							k['tag'] = $(this).find('.inputTag').val();
+							k['format'] = $(this).find('.inputDirect').val();
+							h['rule']['result'].push(k);
+						}
+					})
+					$(this).data('rule_data',h);
+				}
+			})
+			
+			var rules = [];
+			$('.rule_item li').each(function(){
+				rules.push($(this).data('rule_data'));
+			})
+			
+			var hh = {};
+			var staticname = $('#source_name').val();
+			hh[staticname] = {}
+			hh[staticname]['rules'] = rules
+				if(rules.length > 0){
+				$.ajax({
+					type:'POST',
+					url:'/make-config-record',
+					data:{country: $('#country').val(), setproperty: JSON.stringify(hh)}
+				}).done(function(resp){
+					$('.basetag').val('');
+					$('.is_retable').prop('checked', false);
+					$('.use_count').prop('checked', false);
+					$('.use_indexof').prop('checked', false);
+					$('.index').val('');
+					$('.index').hide();
+					$('.use_condition').prop('checked', false);
+					$('.record_condition .condition').remove();
+					$('.inputRecord option[value=""]').prop('selected', true);
+					$('.con_delimeter').val('');
+					$('.con_delimeter').hide();
+					$('.record_resultant .rrecord').remove();
+					$('.inputfinal option[value=""]').prop('selected', true);
+					$('.inputfinal').parent('div').parent('div').hide();
+					$('.rule_item li').remove();
+					$('.record_modal').modal('hide');
+				})
+			}
+		})
+		$('.new_item').on('click',function(){
+			$('.rule_item li').each(function(){
+					var h = {};
+					h['rule'] = {};
+					h['rule']['ruleName'] = $(this).text();
+				if($(this).hasClass('active')){
+					h['rule']['basetag'] = $('.basetag').val();
+					if($('.is_retable').is(':checked')){
+						h['rule']['repeatable'] = 1;
+					}else{
+						h['rule']['repeatable'] = 0;
+					}
+					if($('.use_count').is(':checked')){
+						h['rule']['count'] = 1;
+					}else{
+						h['rule']['count'] = 0;
+					}
+					if($('.use_indexof').is(':checked')){
+						h['rule']['indexValue'] = $('.index').val();
+					}else{
+						h['rule']['indexValue'] = '';
+					}
+					
+					h['rule']['condition'] = [];
+					
+					if($('.use_condition').is(':checked')){
+						$('.desc_item .record_condition .condition').each(function(){
+							var k = {};
+							k['type'] = $(this).find('.inputType').val();
+							k['typeValue'] = $(this).find('.inputValue').val();
+							k['tag'] = $(this).find('.inputTag').val();
+							k['action'] = $(this).find('.inputAction').val();
+							k['type1'] = $(this).find('.inputType1').val();
+							k['typeValue1'] = $(this).find('.inputValue1').val();
+							k['tag1'] = $(this).find('.inputTag1').val();
+							k['customValue'] = $(this).find('.customValue1').val();
+							k['operator'] = $(this).find('.inputCondition').val();
+							h['rule']['condition'].push(k);
+							
+						})
+					}
+					
+					h['rule']['resultAction'] = $('.inputRecord').val();
+					h['rule']['contcatenate'] = $('.con_delimeter').val();
+					h['rule']['fproperty'] = $('.inputfinal').val();
+					h['rule']['result'] = [];
+					$('.desc_item .record_resultant .rrecord').each(function(){
+						var k = {};
+						k['type'] = $(this).find('.inputType').val();
+						k['typeValue'] = $(this).find('.inputValue').val();
+						k['tag'] = $(this).find('.inputTag').val();
+						k['format'] = $(this).find('.inputDirect').val();
+						h['rule']['result'].push(k);
+					})
+					$(this).data('rule_data',h);
+					console.log(h);
+				}
+			})
+			
+			
+			$('.free_modal .modal-title').text('Add Rule Name');
+			$('.free_modal .modal-body').html('');
+			$('.free_modal .modal-body').html('<input type="text" id="rule_name" class="form-control" />');
+			$('.free_modal').modal('show');
+		})
+		$('.free_modal, record_modal').on('hidden.bs.modal', function () {
+			if($('#rule_name').val()!=''){
+				$('.desc_item .content').remove();
+				$('.record_condition .condition').remove();
+				$('.record_resultant .rrecord').remove();
+				var id = 'content1';
+				$('.hidden > .content').attr('id', id);
+				var str = $('.hidden').html();
+				$('.desc_item').append(str);
+				$('.hidden > .content').removeAttr('id');
+				$('.con_delimeter').val('');
+				$('.con_delimeter').hide();
+				$('.rule_div .rule_item li').removeClass('active');
+				$('.rule_div .rule_item ul').append('<li class="active">'+$('#rule_name').val()+'</li>');
+				$('#rule_name').val('');
+				$('.record_final').hide();
+			}
+		});
+		$(document).on('click', '.rule_item li', function(){
+		
+			$('.rule_item li').each(function(){
+					var h = {};
+					h['rule'] = {};
+					h['rule']['ruleName'] = $(this).text();
+				if($(this).hasClass('active')){
+					h['rule']['basetag'] = $('.basetag').val();
+					if($('.is_retable').is(':checked')){
+						h['rule']['repeatable'] = 1;
+					}else{
+						h['rule']['repeatable'] = 0;
+					}
+					if($('.use_count').is(':checked')){
+						h['rule']['count'] = 1;
+					}else{
+						h['rule']['count'] = 0;
+					}
+					if($('.use_indexof').is(':checked')){
+						h['rule']['indexValue'] = $('.index').val();
+					}else{
+						h['rule']['indexValue'] = '';
+					}
+					
+					h['rule']['condition'] = [];
+					
+					if($('.use_condition').is(':checked')){
+						$('.record_condition .condition').each(function(){
+							if($(this).find('.inputType').val() != ''){
+								var k = {};
+								k['type'] = $(this).find('.inputType').val();
+								k['typeValue'] = $(this).find('.inputValue').val();
+								k['tag'] = $(this).find('.inputTag').val();
+								k['action'] = $(this).find('.inputAction').val();
+								k['type1'] = $(this).find('.inputType1').val();
+								k['typeValue1'] = $(this).find('.inputValue1').val();
+								k['tag1'] = $(this).find('.inputTag1').val();
+								k['customValue'] = $(this).find('.customValue1').val();
+								k['operator'] = $(this).find('.inputCondition').val();
+								h['rule']['condition'].push(k);
+							}
+						})
+					}
+					
+					h['rule']['resultAction'] = $('.inputRecord').val();
+					h['rule']['contcatenate'] = $('.con_delimeter').val();
+					h['rule']['fproperty'] = $('.inputfinal').val();
+					h['rule']['result'] = [];
+					$('.record_resultant .rrecord').each(function(){
+						if($(this).find('.inputType').val() != ''){
+							var k = {};
+							k['type'] = $(this).find('.inputType').val();
+							k['typeValue'] = $(this).find('.inputValue').val();
+							k['tag'] = $(this).find('.inputTag').val();
+							k['format'] = $(this).find('.inputDirect').val();
+							h['rule']['result'].push(k);
+						}
+					})
+					$(this).data('rule_data',h);
+				}
+			})
+		
+		
+		if(!$(this).hasClass('active')){
+			$('.desc_item .content').remove();
+			$('.record_condition .condition').remove();
+			$('.record_resultant .rrecord').remove();
+				var data = $(this).data('rule_data');				
+				for (const [key, value] of Object.entries(data)) {
+					console.log(value);
+						var id = 'content1';
+						$('.hidden > .content').attr('id', id);
+						var str = $('.hidden').html();
+						$('.desc_item').append(str);
+						$('.hidden > .content').removeAttr('id');
+						var clas = $('.desc_item #'+id);
+						clas.find('.basetag').val(value.basetag);
+						if(value.repeatable == 1){
+							clas.find('.is_retable').prop('checked', true);							
+						}else{
+							clas.find('.is_retable').prop('checked', false);			
+						}
+						if(value.count == 1){
+							clas.find('.use_count').prop('checked', true);							
+						}else{
+							clas.find('.use_count').prop('checked', false);			
+						}
+						if(value.indexValue != ''){
+							clas.find('.index').val(value.indexValue);	
+							clas.find('.use_indexof').prop('checked', true);	
+							clas.find('.index').show();
+						}else{
+							clas.find('.index').val('');	
+							clas.find('.use_indexof').prop('checked', false);	
+							clas.find('.index').hide();
+						}
+						console.log(value.condition);
+						if(value.condition.length > 0){
+							clas.find('.use_condition').prop('checked', true);
+							clas.find('.record_condition').show();
+							var i = 1;
+							value.condition.forEach(function(elem){
+								var id1 = 'condition'+i;
+								$('.rule_data > .condition').attr('id', id1);
+								if(i == 1){
+									$('.rule_data > .condition .delete_item_row').hide();
+								}else{
+									$('.rule_data > .condition .delete_item_row').show();
+								}
+								var str = $('.rule_data').html();
+								$('.record_condition').append(str);
+								$('.rule_data > .condition').removeAttr('id');
+								$('#'+id1).find('.inputType option[value="'+elem.type+'"]').prop('selected',true);
+								if(elem.type == 'sources'){
+									var str1 = '<option value="">Choose..</option>';
+									sources.forEach(function(elem1){
+										str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+									})
+									
+									$('#'+id1).find('.inputValue').empty().append(str1);
+									
+								}else if(elem.type == 'property'){
+									var str1 = '<option value="">Choose..</option>';
+									property.forEach(function(elem2){
+										str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+									})
+									
+									$('#'+id1).find('.inputValue').empty().append(str1);
+								}
+								$('#'+id1).find('.inputValue option[value="'+elem.typeValue+'"]').prop('selected', true);
+								
+								if(elem.tag != ''){
+									$('#'+id1).find('.inputTag').val(value.tag);
+									$('#'+id1).find('.inputTag').show();
+								}
+								$('#'+id1).find('.inputAction option[value="'+elem.action+'"]').prop('selected', true);
+								$('#'+id1).find('.inputType1 option[value="'+elem.type1+'"]').prop('selected',true);
+								$('#'+id1).find('.inputType1').parent('div').show();
+								if(elem.type1 == 'sources'){
+									var str1 = '<option value="">Choose..</option>';
+									sources.forEach(function(elem1){
+										str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+									})
+									
+									$('#'+id1).find('.inputValue1').empty().append(str1);
+									$('#'+id1).find('.inputValue1 option[value="'+elem.typeValue1+'"]').prop('selected', true);
+									$('#'+id1).find('.inputValue1').parent('div').show();
+									
+								}else if(elem.type1 == 'property'){
+									var str1 = '<option value="">Choose..</option>';
+									property.forEach(function(elem2){
+										str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+									})
+									
+									$('#'+id1).find('.inputValue1').empty().append(str1);
+									$('#'+id1).find('.inputValue1 option[value="'+elem.typeValue1+'"]').prop('selected', true);
+									$('#'+id1).find('.inputValue1').parent('div').show();
+									
+								}else if(elem.type1 == 'custom'){
+									$('#'+id1).find('.inputValue1').parent('div').hide();
+									$('#'+id1).find('.customValue1').val(elem.customValue);
+									$('#'+id1).find('.customValue1').parent('div').show();
+								}
+								
+								if(elem.tag1 != ''){
+									$('#'+id1).find('.inputTag1').val(elem.tag1);
+									$('#'+id1).find('.inputTag1').parent('div').show();
+								}
+								$('#'+id1).find('.inputCondition option[value="'+elem.operator+'"]').prop('selected', true);
+													
+								i++;
+							})
+						}
+						
+						clas.find('.inputRecord option[value="'+value.resultAction+'"]').prop('selected', true);
+						var str1 = '<option value="">Choose..</option>';
+						property.forEach(function(elem2){
+							str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+						})
+						
+						clas.find('.inputfinal').empty().append(str1);
+						if(value.resultAction == 'concat'){
+							clas.find('.con_delimeter').val(value.contcatenate);
+							clas.find('.con_delimeter').show();
+							clas.find('.inputfinal').parent('div').parent('div').show();
+						}else{
+							clas.find('.con_delimeter').val('');
+							clas.find('.con_delimeter').hide();
+							clas.find('.inputfinal').parent('div').parent('div').hide();
+						}
+						if(value.fproperty != ''){
+							clas.find('.inputfinal option[value="'+value.fproperty+'"]').prop('selected', true);
+							clas.find('.inputfinal').parent('div').parent('div').show();
+						}else{
+							clas.find('.inputfinal option[value=""]').prop('selected', true);
+							
+						}
+						var k = 1
+						if(value.result.length > 0){
+							clas.find('.record_resultant').show();
+						}
+						value.result.forEach(function(elem){
+							var id1 = 'rrecord'+k;
+							$('.resultant > .rrecord').attr('id', id1);
+							if(k == 1){
+								$('.resultant > .rrecord .delete_item_row').hide();
+							}else{
+								$('.resultant > .rrecord .delete_item_row').show();
+							}
+							var str = $('.resultant').html();
+							$('.record_resultant').append(str);
+							$('.resultant > .rrecord').removeAttr('id');
+							$('#'+id1).find('.inputType option[value="'+elem.type+'"]').prop('selected',true);
+							
+							if(elem.type == 'sources'){
+								var str1 = '<option value="">Choose..</option>';
+								sources.forEach(function(elem1){
+									str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+								})
+								
+								$('#'+id1).find('.inputValue').empty().append(str1);
+								
+							}else if(elem.type == 'property'){
+								var str1 = '<option value="">Choose..</option>';
+								property.forEach(function(elem2){
+									str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+								})
+								
+								$('#'+id1).find('.inputValue').empty().append(str1);
+								
+							}
+							$('#'+id1).find('.inputValue option[value="'+elem.typeValue+'"]').prop('selected', true);
+							if(elem.tag != ''){
+								$('#'+id1).find('.inputTag').val(value.tag);
+								$('#'+id1).find('.inputTag').show();
+							}
+							
+							if(value.resultAction != 'concat'){
+								$('#'+id1).find('.inputDirect option[value="'+elem.format+'"]').prop('selected', true);
+								$('#'+id1).find('.inputDirect').parent('div').show();
+							}else{
+								$('#'+id1).find('.inputDirect').parent('div').hide();
+							}
+							
+							k++;
+						})
+
+					}
+					
+					
+				$('.rule_item li').removeClass('active');
+				$(this).addClass('active');
+			}
+		})
+		
+		$('.delete_item').on('click', function(){
+			var r = confirm("Are you sure, you want to delete this rule!");
+			if(r){
+				$('.rule_item li').each(function(){
+					if($(this).hasClass('active')){
+						$(this).remove();
+					}
+				})
+				$('.rule_item ul li:last-child').addClass('active');
+				$('.rule_item li').each(function(){
+					if($(this).hasClass('active')){
+						$('.desc_item .content').remove();
+						$('.record_condition .condition').remove();
+						$('.record_resultant .rrecord').remove();
+							var data = $(this).data('rule_data');				
+							for (const [key, value] of Object.entries(data)) {
+								console.log(value);
+									var id = 'content1';
+									$('.hidden > .content').attr('id', id);
+									var str = $('.hidden').html();
+									$('.desc_item').append(str);
+									$('.hidden > .content').removeAttr('id');
+									var clas = $('.desc_item #'+id);
+									clas.find('.basetag').val(value.basetag);
+									if(value.repeatable == 1){
+										clas.find('.is_retable').prop('checked', true);							
+									}
+									if(value.count == 1){
+										clas.find('.use_count').prop('checked', true);							
+									}
+									if(value.indexValue != ''){
+										clas.find('.index').val(value.indexValue);	
+										clas.find('.use_indexof').prop('checked', true);	
+										clas.find('.index').show();
+									}
+									console.log(value.condition);
+									if(value.condition.length > 0){
+										clas.find('.use_condition').prop('checked', true);
+										var i = 1;
+										value.condition.forEach(function(elem){
+											var id1 = 'condition'+i;
+											$('.rule_data > .condition').attr('id', id1);
+											var str = $('.rule_data').html();
+											$('.record_condition').append(str);
+											$('.rule_data > .condition').removeAttr('id');
+											$('#'+id1).find('.inputType option[value="'+elem.type+'"]').prop('selected',true);
+											if(elem.type == 'sources'){
+												var str1 = '<option value="">Choose..</option>';
+												sources.forEach(function(elem1){
+													str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+												})
+												
+												$('#'+id1).find('.inputValue').empty().append(str1);
+												
+											}else if(elem.type == 'property'){
+												var str1 = '<option value="">Choose..</option>';
+												property.forEach(function(elem2){
+													str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+												})
+												
+												$('#'+id1).find('.inputValue').empty().append(str1);
+											}
+											$('#'+id1).find('.inputValue option[value="'+elem.typeValue+'"]').prop('selected', true);
+											
+											if(elem.tag != ''){
+												$('#'+id1).find('.inputTag').val(value.tag);
+												$('#'+id1).find('.inputTag').show();
+											}
+											$('#'+id1).find('.inputAction option[value="'+elem.action+'"]').prop('selected', true);
+											$('#'+id1).find('.inputType1 option[value="'+elem.type1+'"]').prop('selected',true);
+											$('#'+id1).find('.inputType1').parent('div').show();
+											if(elem.type1 == 'sources'){
+												var str1 = '<option value="">Choose..</option>';
+												sources.forEach(function(elem1){
+													str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+												})
+												
+												$('#'+id1).find('.inputValue1').empty().append(str1);
+												$('#'+id1).find('.inputValue1 option[value="'+elem.typeValue1+'"]').prop('selected', true);
+												$('#'+id1).find('.inputValue1').parent('div').show();
+												
+											}else if(elem.type1 == 'property'){
+												var str1 = '<option value="">Choose..</option>';
+												property.forEach(function(elem2){
+													str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+												})
+												
+												$('#'+id1).find('.inputValue1').empty().append(str1);
+												$('#'+id1).find('.inputValue1 option[value="'+elem.typeValue1+'"]').prop('selected', true);
+												$('#'+id1).find('.inputValue1').parent('div').show();
+												
+											}else if(elem.type1 == 'custom'){
+												$('#'+id1).find('.inputValue1').parent('div').hide();
+												$('#'+id1).find('.customValue1').val(elem.customValue);
+												$('#'+id1).find('.customValue1').parent('div').show();
+											}
+											
+											if(elem.tag1 != ''){
+												$('#'+id1).find('.inputTag1').val(elem.tag1);
+												$('#'+id1).find('.inputTag1').parent('div').show();
+											}
+											$('#'+id1).find('.inputCondition option[value="'+elem.operator+'"]').prop('selected', true);
+																
+											i++;
+										})
+									}
+									
+									clas.find('.inputRecord option[value="'+value.resultAction+'"]').prop('selected', true);
+									if(value.resultAction == 'concat'){
+										clas.find('.con_delimeter').val(value.contcatenate);
+										clas.find('.con_delimeter').show();
+									}
+									if(value.fproperty != ''){
+										clas.find('.inputfinal option[value="'+value.fproperty+'"]').prop('selected', true);
+										clas.find('.inputfinal').parent('div').parent('div').show();
+									}
+									var k = 1
+									value.result.forEach(function(elem){
+										var id1 = 'rrecord'+k;
+										$('.resultant > .rrecord').attr('id', id1);
+										if(k == 1){
+											$('.resultant > .rrecord .delete_item_row').hide();
+										}else{
+											$('.resultant > .rrecord .delete_item_row').show();
+										}
+										var str = $('.resultant').html();
+										$('.record_resultant').append(str);
+										$('.resultant > .rrecord').removeAttr('id');
+										$('#'+id1).find('.inputType option[value="'+elem.type+'"]').prop('selected',true);
+										
+										if(elem.type == 'sources'){
+											var str1 = '<option value="">Choose..</option>';
+											sources.forEach(function(elem1){
+												str1+= '<option value="'+elem1+'">'+elem1+'</option>';
+											})
+											
+											$('#'+id1).find('.inputValue').empty().append(str1);
+											
+										}else if(elem.type == 'property'){
+											var str1 = '<option value="">Choose..</option>';
+											property.forEach(function(elem2){
+												str1+= '<option value="'+elem2+'">'+elem2+'</option>';
+											})
+											
+											$('#'+id1).find('.inputValue').empty().append(str1);
+											
+										}
+										$('#'+id1).find('.inputValue option[value="'+elem.typeValue+'"]').prop('selected', true);
+										if(elem.tag != ''){
+											$('#'+id1).find('.inputTag').val(value.tag);
+											$('#'+id1).find('.inputTag').show();
+										}
+										
+										if(value.resultAction != 'concat'){
+											$('#'+id1).find('.inputDirect option[value="'+elem.format+'"]').prop('selected', true);
+											$('#'+id1).find('.inputDirect').parent('div').show();
+										}else{
+											$('#'+id1).find('.inputDirect').parent('div').hide();
+										}
+										
+										k++;
+									})
+
+								}
+					}else{
+					
+						$('.desc_item .content').remove();
+						$('.record_condition .condition').remove();
+						$('.record_resultant .rrecord').remove();
+						var id = 'content1';
+						$('.hidden > .content').attr('id', id);
+						var str = $('.hidden').html();
+						$('.desc_item').append(str);
+						$('.hidden > .content').removeAttr('id');
+						$('.con_delimeter').val('');
+						$('.con_delimeter').hide();
+						$('.record_final').hide();
+					}
+				})
+				
+				if($('.rule_item li').length == 0){
+						$('.desc_item .content').remove();
+						$('.record_condition .condition').remove();
+						$('.record_resultant .rrecord').remove();
+						var id = 'content1';
+						$('.hidden > .content').attr('id', id);
+						var str = $('.hidden').html();
+						$('.desc_item').append(str);
+						$('.hidden > .content').removeAttr('id');
+						$('.con_delimeter').val('');
+						$('.con_delimeter').hide();
+						$('.record_final').hide();
+						
+				}
+				
+				
+			}
+			
+		})
+		</script>
+	</body>
+</html>

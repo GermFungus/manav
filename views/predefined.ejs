@@ -1,0 +1,212 @@
+<html>
+	<head>
+		<title>Configuration</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="main_container">
+			<%-	include("partials/nav") %>
+			<h2>Predefined Properties</h2>
+			<ul class="plist">
+				<%
+					pre_array.forEach(function(data){
+				%>	
+						<li class="btn btn-default"><%= data %></li>
+				<%	
+					})
+				%>
+			</ul>
+		</div>
+		<div class="main_container col-lg-11">
+			<div class="form-group">
+				<label for="country">Select Country</label>
+				<%-	include("partials/header") %>
+			</div>
+			<div class="custom_field" style="display:none;">
+				<div class="form-group">
+					<button type="button" class="btn btn-default custom_prop">Add Custom Property</button>
+				</div>
+			</div>
+			<div class="source" style="display:none;">
+				<div class="card">
+				   <div class="card-body">
+					<div id="table" class="table-editable">
+					  <span class="table-add float-right mb-3 mr-2" style="margin: 10px;height: 27px;width: 78px;float: right;"><button class='btn btn-default'>Add Source</button></span>
+					  <table class="table table-bordered table-responsive-md table-striped text-center">
+						<thead>
+						  <tr>
+							<th class="text-center">Name</th>
+							<th class="text-center">Url</th>
+							<th class="text-center">Type</th>
+							<th class="text-center">ResponseType</th>
+							<th class="text-center">Language</th>
+							<th class="text-center">Primary</th>
+							<th class="text-center">Variable1</th>
+							<th class="text-center">defaultValue1</th>
+							<th class="text-center">Variable2</th>
+							<th class="text-center">defaultValue2</th>
+							<th class="text-center">Order</th>
+							<th class="text-center">Depend</th>
+							<th class="text-center">Size</th>
+							<th class="text-center">Remove</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  
+						</tbody>
+					  </table>
+					</div>
+				  </div>
+				</div>
+				<input type='hidden' value="" id="data" />
+				<button type="button" id='export-btn' class='btn btn-success'>Save</button>
+			</div>
+		</div>
+		<script src="/js/jquery-3.4.1.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('#country').on('change', function(){
+				
+				if($(this).val() != 0){
+					$.ajax({
+						type:'POST',
+						url:'/checkfile',
+						data: {country : $('#country').val()}
+					}).done(function(resp){
+						console.log(resp);
+						if(resp == 0){
+							$('.custom_field').html('');
+							$('.custom_field').html('<div class="form-group"><button type="button" class="btn btn-default custom_prop">Add Custom Property</button></div>');
+							$('.custom_field').show();
+							$('.source').html('');
+							$('.source').html('<div class="card"><div class="card-body"><div id="table" class="table-editable"><span class="table-add float-right mb-3 mr-2" style="margin: 10px;height: 27px;width: 78px;float: right;"><button class="btn btn-default">Add Source</button></span><table class="table table-bordered table-responsive-md table-striped text-center"><thead><tr><th class="text-center">Name</th><th class="text-center">Url</th><th class="text-center">Type</th><th class="text-center">ResponseType</th><th class="text-center">Language</th><th class="text-center">Primary</th><th class="text-center">Variable1</th><th class="text-center">defaultValue1</th><th class="text-center">Variable2</th><th class="text-center">defaultValue2</th><th class="text-center">Order</th><th class="text-center">Depend</th><th class="text-center">Size</th><th class="text-center">Remove</th></tr></thead><tbody></tbody></table></div></div></div><input type="hidden" value="" id="data" /><button type="button" id="export-btn" class="btn btn-success">Save</button>');
+							$('.source').show();
+						}else{
+							var data = JSON.parse(resp);
+							var property = data.property;
+							var str = '';
+							property.forEach(function(n1){
+								str += '<div class="form-group"><label>Property</label><input type="text" class="" name="property" value="'+n1+'"><span class="delete" onclick="remove(this)">X</span></div>';
+							})
+							$('.custom_field').append(str);
+							$('.custom_field').show();
+							var source = data.sources;
+							var newTr = '';
+							source.forEach(function(n2){
+								newTr += '<tr>  <td class="pt-3-half" contenteditable="true">'+n2.name+'</td>  <td class="pt-3-half" contenteditable="true">'+n2.url+'</td><td class="pt-3-half" contenteditable="true">'+n2.type+'</td><td class="pt-3-half" contenteditable="true">'+n2.responsetype+'</td><td class="pt-3-half" contenteditable="true">'+n2.language+'</td><td class="pt-3-half" contenteditable="true">'+n2.primary+'</td><td class="pt-3-half" contenteditable="true">'+n2.variable1+'</td><td class="pt-3-half" contenteditable="true">'+n2.defaultvalue1+'</td><td class="pt-3-half" contenteditable="true">'+n2.variable2+'</td><td class="pt-3-half" contenteditable="true">'+n2.defaultvalue2+'</td><td class="pt-3-half" contenteditable="true">'+n2.order+'</td><td class="pt-3-half" contenteditable="true">'+n2.depend+'</td><td class="pt-3-half" contenteditable="true">'+n2.size+'</td> <td>    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">Remove</button></span>  </td></tr>';
+							})
+							$('tbody').append(newTr);
+							$('.source').show();
+						}
+					})
+					
+				}else{
+					window.location.reload();
+				}	
+				
+			})
+			
+			$(document).on('click', '.custom_prop', function(){
+				var str = '<div class="form-group"><label>Property</label><input type="text" class="" name="property"><span class="delete" onclick="remove(this)">X</span></div>';
+				$('.custom_field').append(str);
+			})
+			
+		})
+		function remove(elem){
+			$(elem).parent('div').remove();
+		}
+		
+ const $tableID = $(document);
+ const $BTN = $(document);
+ const $EXPORT = $('#export');
+ const newTr = '<tr>  <td class="pt-3-half" contenteditable="true"></td>  <td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td><td class="pt-3-half" contenteditable="true"></td> <td>    <span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0 waves-effect waves-light">Remove</button></span>  </td></tr>';
+
+ $(document).on('click', '.table-add', 'button', () => {
+
+   //const $clone = $tableID.find('tbody tr').last().clone(true).removeClass('hide table-line');
+
+   //if ($tableID.find('tbody tr').length === 0) {
+
+     $('tbody').append(newTr);
+   //}
+
+   //$tableID.find('table').append($clone);
+ });
+
+ $tableID.on('click', '.table-remove', function () {
+
+   $(this).parents('tr').detach();
+ });
+
+ $tableID.on('click', '.table-up', function () {
+
+   const $row = $(this).parents('tr');
+
+   if ($row.index() === 1) {
+     return;
+   }
+
+   $row.prev().before($row.get(0));
+ });
+
+ $tableID.on('click', '.table-down', function () {
+
+   const $row = $(this).parents('tr');
+   $row.next().after($row.get(0));
+ });
+
+ // A few jQuery helpers for exporting only
+ jQuery.fn.pop = [].pop;
+ jQuery.fn.shift = [].shift;
+
+ $BTN.on('click', '#export-btn', () => {
+	const result = {};
+   const $rows = $tableID.find('tr:not(:hidden)');
+   const headers = [];
+   const data = [];
+
+   // Get the headers (add special header logic here)
+   $($rows.shift()).find('th:not(:empty)').each(function () {
+
+     headers.push($(this).text().toLowerCase());
+   });
+
+   // Turn all existing rows into a loopable array
+   $rows.each(function () {
+     const $td = $(this).find('td');
+     const h = {};
+
+     // Use the headers from earlier to name our hash keys
+     headers.forEach((header, i) => {
+		if(header != 'remove'){
+			h[header] = $td.eq(i).text();
+		}
+		
+     });
+
+     data.push(h);
+   });
+	result['sources']= data;
+	const property = [];
+	$("input[name='property']").each(function(){
+		property.push($(this).val());
+	})
+   result['property'] = property;
+   result['country'] = $('#country').val();
+   var final_result = JSON.stringify(result);
+   
+   $.ajax({
+		type:'POST',
+		url:'/submit-form',
+		data: {finaldata : final_result}
+	}).done(function(resp){
+		window.location.href = '/tables';
+	})
+   
+   // Output the result
+   //$EXPORT.text(JSON.stringify(data));
+ });	
+	</script>
+	</body>
+</html>

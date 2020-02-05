@@ -1,0 +1,1 @@
+{"sources":[{"name":"Spain-01","url":"https://cima.aemps.es/cima/rest/medicamento?cn=cod_nation","type":"API","responsetype":"JSON","language":"ES","primary":"1","variable1":"cod_nation","defaultvalue1":"811893","variable2":"","defaultvalue2":"","order":""}],"property":[],"country":"spain"}
