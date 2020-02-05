@@ -53,12 +53,24 @@ app.get('/france001', function(req, res) {
                 company_name: arr[1],
                 form: arr[2],
                 route_adminstration: arr[3],
-
-
+                marketing_auth: arr[4],
+                auth_procedure: arr[5],
+                marketing_status: arr[6]
+            });
+        } else {
+            cis_array[cis] = [];
+            cis_array[cis].push({
+                cis_code: arr[0],
+                company_name: arr[1],
+                form: arr[2],
+                route_adminstration: arr[3],
+                marketing_auth: arr[4],
+                auth_procedure: arr[5],
+                marketing_status: arr[6]
             });
         }
         if (last) {
-            console.log(compo_array);
+            console.log(cis_array);
             return false;
         }
     });
