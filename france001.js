@@ -8,8 +8,9 @@ var app = express();
 //custom array to store data
 var compo_array = [];
 var cis_array = [];
+var cis_cip = [];
 //send request to route on browser
-var property_name = {}
+var property_name = {};
 app.get('/france001', function(req, res) {
 
     lineReader.eachLine("./COMPO.txt", function(line, last) {
@@ -40,14 +41,14 @@ app.get('/france001', function(req, res) {
         }
 
         if (last) {
-            console.log(compo_array);
+            //console.log(compo_array);
             return false;
         }
-    })
+    });
     lineReader.eachLine("./CIS.txt", function(line, last) {
         let arr = line.split('\t');
         let cis = arr[0];
-        if (cis in compo_array) {
+        if (cis in cis_array) {
             cis_array[cis].push({
                 cis_code: arr[0],
                 company_name: arr[1],
@@ -75,12 +76,40 @@ app.get('/france001', function(req, res) {
         }
     });
 
-    //});
+    lineReader.eachLine("./CIS_CIP.txt", function(line, last) {
+        let arr = line.split('\t');
+        let cis = arr[0];
+        if (cis in cis_cip) {
+            cis_cip[cis].push({
+                cis_code: arr[0],
+                cip_code7: arr[1],
+                packaging_description: arr[2],
+                adminstration_status: arr[3],
+                marketing_status: arr[4],
+                dateOfDeclaration: arr[5],
+                cip_code13: arr[6]
 
-    // send status to request
+            });
+        } else {
+            cis_cip[cis] = [];
+            cis_cip[cis].push({
+                cis_code: arr[0],
+                cip_code7: arr[1],
+                packaging_description: arr[2],
+                adminstration_status: arr[3],
+                marketing_status: arr[4],
+                dateOfDeclaration: arr[5],
+                cip_code13: arr[6]
+            });
+        }
+        if (last) {
+            console.log(cis_array);
+            return false;
+        }
+    });
     res.sendStatus(200);
     res.end();
-})
+});
 
 app.listen('8081')
 exports = module.exports = app;
